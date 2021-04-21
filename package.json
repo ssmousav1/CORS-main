@@ -1,0 +1,39 @@
+{
+  "name": "back-cors",
+  "version": "1.0.2",
+  "description": "An app to run cors features",
+  "main": "server.js",
+  "bin": {
+    "back-cors": "./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/hiro-it/cors/back-cors.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/hiro-it/cors/back-cors/issues"
+  },
+  "homepage": "https://gitlab.com/hiro-it/cors/back-cors#readme",
+  "dependencies": {
+    "@serialport/parser-readline": "^9.0.1",
+    "archiver": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "express-validator": "^6.7.0",
+    "gps": "^0.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "nmea-simple": "^3.2.0",
+    "node-cmd": "^4.0.0",
+    "serialport": "^9.0.1",
+    "socket.io-client": "^3.0.5",
+    "sqlite3": "^5.0.0",
+    "unzipper": "^0.10.11",
+    "ws": "^7.4.3"
+  }
+}

@@ -1,0 +1,13 @@
+node_modules
+dist
+releases
+
+package-lock.json
+yarn.lock
+
+.vscode
+.idea
+
+*.deb
+*.zip
+*.bin
