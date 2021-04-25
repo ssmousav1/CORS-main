@@ -9,7 +9,7 @@ const userValidator = () => {
 
 const casterValidator = () => {
   return [
-    body('hostAddress').isString().isIP(),
+    // body('hostAddress').isString().isIP(),
     body('port').isString().isPort(),
     body('mountpoint').isString(),
     // body('user').isString().isLength({ min: 4, max: 16 }),
