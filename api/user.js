@@ -124,7 +124,8 @@ routes.put('/', (req, res) => {
         res.status(500).json({ message: 'خطا در استخراج اطلاعات ' });
       } else {
         if (data[0]) {
-          if (data[0].password === saltHashPassword(old_password, username).passwordHash) {
+          console.log('&&&&&&&&&',req.user.username);
+          if (data[0].password === saltHashPassword(old_password, req.user.username).passwordHash) {
 
             userDB.run(`UPDATE users SET 
             username = '${username}', 
