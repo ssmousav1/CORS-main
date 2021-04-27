@@ -13,7 +13,7 @@ const accessToken = async (req, res, next) => {
 			if (err) {
 
 				try {
-					userDB.all(`SELECT username, admin, network_config, file_download, file_edit, ntrip_config, password, id  FROM users WHERE username = '${req.body.username}'`, async (err, data) => {
+					userDB.all(`SELECT username, admin, network_config, file_download, file_delete, file_edit, ntrip_config, password, id  FROM users WHERE username = '${req.body.username}'`, async (err, data) => {
 						if (err) {
 							console.error('there is an error from loading data from database : ****', err);
 							res.status(500).json({ message: 'error in getting data from DB' });
@@ -28,6 +28,7 @@ const accessToken = async (req, res, next) => {
 									admin: data[0].admin,
 									network_config: data[0].network_config,
 									file_download: data[0].file_download,
+									file_delete: data[0].file_delete,
 									file_edit: data[0].file_edit,
 									ntrip_config: data[0].ntrip_config,
 									userid: data[0].id
@@ -42,6 +43,7 @@ const accessToken = async (req, res, next) => {
 									network_config: data[0].network_config,
 									file_download: data[0].file_download,
 									file_edit: data[0].file_edit,
+									file_delete: data[0].file_delete,
 									ntrip_config: data[0].ntrip_config,
 									userid: data[0].id
 								}
