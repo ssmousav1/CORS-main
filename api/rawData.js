@@ -55,13 +55,13 @@ rawDataRoutes.get('/archive-years', (req, res) => {
 rawDataRoutes.get('/:filename', (req, res) => {
   const filename = req.params.filename
 
-
+  console.log(filename , '<<<<<<<<<<<<<< this is filename');
   if (!!req.user.admin || !!req.user.file_download) {
     try {
-      extractRaw(filename)
-      let downloadTimeout = setTimeout(() => {
-        console.log(`fs.existsSync(${GPSdata.rawFile}.bin)`, fs.existsSync(`${GPSdata.rawFile}`));
-        res.download(GPSdata.rawFile, error => {
+      // extractRaw(filename)
+      // let downloadTimeout = setTimeout(() => {
+      //   console.log(`fs.existsSync(${GPSdata.rawFile}.bin)`, fs.existsSync(`${GPSdata.rawFile}`));
+        res.download(`./${filename}.bin`, error => {
           if (error) {
             console.log('there is no file ', error);
           } else {
@@ -74,7 +74,7 @@ rawDataRoutes.get('/:filename', (req, res) => {
             clearTimeout(downloadTimeout)
           }
         })
-      }, 3000)
+      // }, 3000)
       //   .then(file => {
       //     console.log('fs.existsSync(`${fileName}.bin`)', fs.existsSync(`${file}`));
       //     let downloadTimeout = setTimeout(() => {

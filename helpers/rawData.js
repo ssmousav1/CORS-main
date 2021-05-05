@@ -35,7 +35,7 @@ const startInterval = (TimeOut) => {
     writeStream.destroy()
     flag = !flag
 
-    zipRaw(`${fileName}.bin`);
+    // zipRaw(`${fileName}.bin`);
 
     fileName = new Date(GPSdata.time).getTime() || Date.now()
     // fileName = Date.now();
