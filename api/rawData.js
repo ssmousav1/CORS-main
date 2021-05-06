@@ -1,13 +1,15 @@
 const { userDB, rawFiles } = require('../DB');
-const fs = require('fs');
-const path = require('path');
+const jwt = require('jsonwebtoken');
+const Logger = require('../middlewares/logger');
 const rawDataRoutes = require('express').Router();
+const DownloadRawDataRoutes = require('express').Router();
 const rawDataConfigRoutes = require('express').Router();
 const { validationResult } = require('express-validator');
 const eventEmitterBuilder = require('../helpers/globalEventEmitter');
 const { extractRaw } = require('../helpers/rawData');
 const { GPSdata } = require('./WS');
 
+const logger = new Logger().getInstance();
 const eventEmitter = new eventEmitterBuilder().getInstance();
 
 rawDataRoutes.get('/', (req, res) => {
@@ -52,57 +54,36 @@ rawDataRoutes.get('/archive-years', (req, res) => {
   })
 });
 
-rawDataRoutes.get('/:filename', (req, res) => {
-  const filename = req.params.filename
-
-  console.log(filename , '<<<<<<<<<<<<<< this is filename');
-  if (!!req.user.admin || !!req.user.file_download) {
-    try {
-      // extractRaw(filename)
-      // let downloadTimeout = setTimeout(() => {
-      //   console.log(`fs.existsSync(${GPSdata.rawFile}.bin)`, fs.existsSync(`${GPSdata.rawFile}`));
-        res.download(`./${filename}.bin`, error => {
-          if (error) {
-            console.log('there is no file ', error);
-          } else {
-            try {
-              // fs.unlinkSync(`${file}`);
-              // fs.unlinkSync(`./${path.basename(file).split('.bin')[0] + '.zip'}`);
-            } catch (e) {
-              console.error('@@@## error in deleteing files', e)
+DownloadRawDataRoutes.get('/:filename/:accesstoken', (req, res) => {
+  const { filename, accesstoken } = req.params
+  console.log(filename, '<<<<<<<<<<<<<< this is filename');
+  jwt.verify(accesstoken, process.env.ACCESS_TOKEN_SECRET || 'accessTokenSecret', (err, user) => {
+    if (err) {
+      return res.status(401).json({ message: 'لطفا وارد شوید' });
+    } else {
+      logger.log(`${req.originalUrl} ${req.connection.remoteAddress}   ${req.method}   ${user.username}    ${user.userid} `)
+      req.user = user;
+      if (!!req.user.admin || !!req.user.file_download) {
+        try {
+          res.download(`./${filename}.bin`, error => {
+            if (error) {
+              console.log('there is no file ', error);
+            } else {
+              try {
+              } catch (e) {
+                console.error('@@@## error in deleteing files', e)
+              }
             }
-            clearTimeout(downloadTimeout)
-          }
-        })
-      // }, 3000)
-      //   .then(file => {
-      //     console.log('fs.existsSync(`${fileName}.bin`)', fs.existsSync(`${file}`));
-      //     let downloadTimeout = setTimeout(() => {
-      //       res.download(file, error => {
-      //         if (error) {
-      //           console.log('there is no file ', error);
-      //         } else {
-      //           try {
-      //             // fs.unlinkSync(`${file}`);
-      //             fs.unlinkSync(`./${path.basename(file).split('.bin')[0] + '.zip'}`);
-      //           } catch (e) {
-      //             console.error('@@@## error in deleteing files', e)
-      //           }
-      //           clearTimeout(downloadTimeout)
-      //         }
-      //       })
-      //     }, 2000)
-      //   })
-      //   .catch(error => {
-      //     res.status(404).json({ message: 'there is no such file' });
-      // })
-    } catch (e) {
-      res.status(500).json({ message: 'error in getting data from DB' });
+          })
+        } catch (e) {
+          res.status(500).json({ message: 'error in getting data from DB' });
+        }
+      } else {
+        res.status(403).json({ message: 'you don not have the right access' });
+      }
     }
-  } else {
-    res.status(403).json({ message: 'you don not have the right access' });
+  });
 
-  }
 });
 
 rawDataRoutes.post('/raw-data-daily', (req, res) => {
@@ -215,4 +196,4 @@ rawDataConfigRoutes.put('/', (req, res) => {
 });
 
 
-module.exports = { rawDataRoutes, rawDataConfigRoutes };
+module.exports = { rawDataRoutes, rawDataConfigRoutes, DownloadRawDataRoutes };

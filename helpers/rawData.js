@@ -20,7 +20,7 @@ const saveRawData = (data) => {
   // TODO disable this condition if there is no storage data
   if (GPSdata.deviceStatus.storage.percent < 90) {
     if (flag) {
-      writeStream = fs.createWriteStream(`raw${fileName}.bin`);
+      writeStream = fs.createWriteStream(`${fileName}.bin`);
       flag = false
     }
     writeStream.write(data)
@@ -40,7 +40,7 @@ const startInterval = (TimeOut) => {
     fileName = new Date(GPSdata.time).getTime() || Date.now()
     // fileName = Date.now();
 
-    writeStream = fs.createWriteStream(`raw${fileName}.bin`);
+    writeStream = fs.createWriteStream(`${fileName}.bin`);
   }, TimeOut);
 }
 
@@ -110,7 +110,7 @@ eventlib.on("row:inserted", (filename) => {
   // extractRaw(filename, "./");
   
   // fs.unlinkSync(`./${filename}.bin`);
-  // fs.unlinkSync(`./${filename}.zip`);
+  fs.unlinkSync(`./${filename}.zip`);
 });
 
 function save2DB(pathZIP, fileSize) {

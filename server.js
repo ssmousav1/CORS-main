@@ -34,7 +34,7 @@ const networkRoutes = require('./api/networkSettings');
 const positionsRoutes = require('./api/positionsSettings');
 const routes = require('./api/user');
 const { handleWebSocket, GPSdata } = require('./api/WS');
-const { rawDataConfigRoutes, rawDataRoutes } = require('./api/rawData');
+const { rawDataConfigRoutes, rawDataRoutes, DownloadRawDataRoutes } = require('./api/rawData');
 const managementRouter = require('./api/management');
 const { socketMessages } = require('./helpers/socketMessages');
 const { LEDCommands, WDCommands, smokeTest } = require('./helpers/messages');
@@ -65,6 +65,7 @@ app.use(express.json());
 app.use('/auth', accessToken, authRouter)
 
 // protected API routes
+app.use("/raw-data-download", DownloadRawDataRoutes);
 app.use(Auth);
 app.use("/users", userValidator(), routes);
 app.use("/caster", casterValidator(), casterRoutes);
