@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const eventEmitterBuilder = require("../helpers/globalEventEmitter");
-const socket = io.connect(`http://${process.env.WD_ADDRESS || 'localhost'}:${process.env.WD_PORT || '3003'}`);
+const socket = io.connect(`http://localhost:3004`);
 const { WDCommands } = require('./messages')
 const { NMEAPort } = require("./globalPorts");
 // const readline = require("readline");
@@ -18,6 +18,7 @@ const logger = new Logger().getInstance();
 const eventEmitter = new eventEmitterBuilder().getInstance();
 
 const messagesToWatchdog = (msg, data = null) => {
+	console.log('msg to WD', msg)
   socket.emit(msg, data);
   eventEmitter.emit(msg, data)
   logger.log(`watchdog message ${msg} --  data : ${JSON.stringify(data)} `)

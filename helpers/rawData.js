@@ -10,7 +10,7 @@ const eventlib = new eventEmitterBuilder().getInstance();
 let flag = true
 let fileName = new Date(GPSdata.time).getTime() || Date.now()
 // let fileName = Date.now();
-let timeOut = 60 * 1000
+let timeOut = 60 * 1000 * 60
 let intervalId;
 
 let writeStream

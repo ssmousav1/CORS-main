@@ -76,6 +76,8 @@ DownloadRawDataRoutes.get('/:filename/:accesstoken', (req, res) => {
             }
           })
         } catch (e) {
+
+		console.log('>>>>>>>>>>>error',e)
           res.status(500).json({ message: 'error in getting data from DB' });
         }
       } else {
