@@ -1,0 +1,3 @@
+export UD_IP="192.168.1.155/24";
+export UD_GW="192.168.1.1";
+export UD_NS="8.8.8.8";

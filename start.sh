@@ -39,7 +39,8 @@ config-pin P8_38 uart
 
 # Configure network
 echo "Configuring the network"
-export env-file
+source env-file
+printenv | grep UD
 
 ip a add $UD_IP dev eth0
 route add default gw $UD_GW
