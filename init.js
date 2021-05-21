@@ -12,13 +12,13 @@ let commands = [
 
 commands.forEach((command) => {
   let res;
-  try {
-    res = cmd.runSync(command);
-    console.log(`success: ${command}`);
-  } catch (error) {
-    console.log(error);
-    process.exit();
-  }
+  setTimeout(() => {
+    try {
+      res = cmd.runSync(command);
+      console.log(`success: ${command}`);
+    } catch (error) {
+      console.log(error);
+      process.exit();
+    }
+  }, 1000);
 });
-
-process.exit();

@@ -1,6 +1,6 @@
 const SerialPort = require("serialport");
 
-const rawDataPort = new SerialPort("/dev/ttyO2", {
+const rawDataPort = new SerialPort("/dev/ttyO4", {
   baudRate: 115200,
 });
 
