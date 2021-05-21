@@ -1,4 +1,5 @@
 # To start all processes and workers and configure runtime environment 
+[ -d "/path/dir/" ] && echo "Directory /path/dir/ exists."
 
 # Turn on GNSS power
 echo "Turn on OEM"
