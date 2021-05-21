@@ -11,3 +11,7 @@ yarn.lock
 *.deb
 *.zip
 *.bin
+*.log
+
+raw.db
+export
