@@ -1,7 +1,5 @@
 const cmd = require("node-cmd");
 
-//*nix supports multiline commands
-
 let commands = [`sudo ./start.sh`];
 // let commands = [`sudo ./start.sh`, `node config.js`, `pm2 start server.js`];
 
