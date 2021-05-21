@@ -11,7 +11,7 @@ commands.forEach((command) => {
     res = cmd.runSync(command);
   } catch (error) {
     console.log(error);
-		break;
+    process.exit();
   }
 });
 
