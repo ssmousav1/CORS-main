@@ -6,8 +6,8 @@ let commands = [`sudo ./start.sh`];
 commands.forEach((command) => {
   let res;
   try {
-    console.log(`running command: ${command}`);
     res = cmd.runSync(command);
+    console.log(`success: ${command}`);
   } catch (error) {
     console.log(error);
     process.exit();
