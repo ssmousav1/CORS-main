@@ -1,6 +1,6 @@
 const cmd = require("node-cmd");
 
-let commands = [`sudo ./start.sh`];
+let commands = [`sudo ./start.sh`, `node config.js`];
 // let commands = [`sudo ./start.sh`, `node config.js`, `pm2 start server.js`];
 
 commands.forEach((command) => {
