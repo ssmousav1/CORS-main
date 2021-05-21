@@ -1,12 +1,15 @@
 // const ConfigCommand = require("./configCommands");
 const { NMEAPort } = require("./globalPorts");
-const { messagesToWatchdog, statusMessagesToWatchdog } = require("./watchdogInterface");
+const {
+  messagesToWatchdog,
+  statusMessagesToWatchdog,
+} = require("./watchdogInterface");
 const { LEDCommands, WDCommands } = require("./messages");
 const gatewayAccess = require("./gatewayAccess");
-const Logger = require('../middlewares/logger');
+const Logger = require("../middlewares/logger");
 const { checkNTRIP } = require("./checkNTRIP");
 // const { configStop, configNMEA, configSave, configBaudRate } = require("./configPorts");
-const { configRAW, configNMEA, configRTCM } = require('./configPorts');
+const { configRAW, configNMEA, configRTCM } = require("./configPorts");
 const { userDB } = require("../DB");
 
 const logger = new Logger().getInstance();
@@ -52,47 +55,57 @@ const wholeConf = [
   `$JSAVE\r\n`,
 ];
 
-
 const startUp = () => {
-  console.log('start up');
-  logger.log('app started')
+  console.log("start up");
+  logger.log("app started");
   // send data to watchdog at startup
-  statusMessagesToWatchdog(LEDCommands.antConf)
-  statusMessagesToWatchdog(LEDCommands.netConf)
-  statusMessagesToWatchdog(LEDCommands.ntripConf)
-  statusMessagesToWatchdog(LEDCommands.oemConf)
+  statusMessagesToWatchdog(LEDCommands.antConf);
+  statusMessagesToWatchdog(LEDCommands.netConf);
+  statusMessagesToWatchdog(LEDCommands.ntripConf);
+  statusMessagesToWatchdog(LEDCommands.oemConf);
 
   // config ports
-  configRAW(NMEAPort)
-  configNMEA(NMEAPort)
-  configRTCM(NMEAPort, { lat: 35.73853090, lon: 51.38968660, alt: 1341.9000 })
-
+  configRAW(NMEAPort);
+  configNMEA(NMEAPort);
+  if (process.env.LAT && process.env.LON && process.env.ALT) {
+    configRTCM(NMEAPort, {
+      lat: process.env.LAT,
+      lon: process.env.LON,
+      alt: process.env.ALT,
+    });
+  }
 
   // check connectivity to gateway
   gatewayAccess()
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
 
   // check ntrip status
-  checkNTRIP()
+  checkNTRIP();
 
-  messagesToWatchdog(WDCommands.storageStatus)
-  messagesToWatchdog(WDCommands.uptimeStatus)
+  messagesToWatchdog(WDCommands.storageStatus);
+  messagesToWatchdog(WDCommands.uptimeStatus);
 
-  userDB.all(`SELECT value  FROM setting WHERE key = 'network'`, (err, data) => {
-    if (err) {
-      console.error('there is an error from loading data from database : ****', err);
-    } else {
-      if (data[0]) {
-        messagesToWatchdog(WDCommands.netConfig, data[0].value)
+  userDB.all(
+    `SELECT value  FROM setting WHERE key = 'network'`,
+    (err, data) => {
+      if (err) {
+        console.error(
+          "there is an error from loading data from database : ****",
+          err
+        );
+      } else {
+        if (data[0]) {
+          messagesToWatchdog(WDCommands.netConfig, data[0].value);
+        }
       }
     }
-  });
+  );
 
   // wholeConf.forEach((command) => {
   //   NMEAPort.write(command);
   //   console.log(command);
   // });
-}
+};
 
-module.exports = startUp
+module.exports = startUp;
