@@ -47,7 +47,7 @@ rawDataPort.on("open", () => {
   console.log("Port is open");
   commands.forEach((command) => {
     rawDataPort.write(command);
-    console.log("config raw , command :", command);
+    console.log("config port command:", command);
   });
 
   rawDataPort.close();
