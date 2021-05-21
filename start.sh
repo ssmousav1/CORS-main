@@ -36,3 +36,6 @@ config-pin P9_13 uart
 # UART 5
 config-pin P8_37 uart 
 config-pin P8_38 uart
+
+# Set timezone
+timedatectl set-timezone Asia/Tehran
