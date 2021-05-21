@@ -4,7 +4,7 @@ let commands = [
   `pm2 del all`,
   `sudo ./start.sh`,
   `node config.js`,
-  `pm2 start server.js`,
+  `pm2 start server.js --watch`,
 ];
 
 commands.forEach((command) => {
