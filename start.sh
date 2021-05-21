@@ -37,5 +37,24 @@ config-pin P9_13 uart
 config-pin P8_37 uart 
 config-pin P8_38 uart
 
+# Configure network
+echo "Configuring the network"
+export env-file
+
+ip a add $UD_IP dev eth0
+route add default gw $UD_GW
+echo "nameserver ${UD_NS}" > /etc/resolv.conf
+
+echo "Configuration done, Current config:"
+echo "IP >>>"
+ip addr | grep eth0 | grep inet
+
+echo "Gateway >>>"
+netstat -nr | sed -n 1,3p
+
+echo "NameServer >>>"
+cat /etc/resolv.conf
+
 # Set timezone
 timedatectl set-timezone Asia/Tehran
+
