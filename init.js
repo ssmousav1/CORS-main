@@ -17,3 +17,5 @@ commands.forEach((command) => {
     process.exit();
   }
 });
+
+process.exit();
