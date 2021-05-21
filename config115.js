@@ -1,7 +1,7 @@
 const SerialPort = require("serialport");
 
 const rawDataPort = new SerialPort("/dev/ttyO2", {
-  baudRate: 19200,
+  baudRate: 115200,
 });
 
 const commands = [
@@ -44,7 +44,7 @@ const commands = [
 ];
 
 rawDataPort.on("open", () => {
-  console.log("Port is open");
+  console.log("Port is open: 115200");
   commands.forEach((command) => {
     rawDataPort.write(command);
     console.log("config port command:", command);
