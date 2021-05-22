@@ -62,7 +62,7 @@ networkRoutes.put('/', (req, res) => {
             gateway: req.body.gateway,
             nameserver: req.body.nameserver
           })
-
+          // TODO comment this to disable using WD helper functions 
           setIP({
             ip: req.body.ip,
             subnet: req.body.subnet,

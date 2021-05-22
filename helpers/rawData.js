@@ -18,13 +18,13 @@ let writeStream
 
 const saveRawData = (data) => {
   // TODO disable this condition if there is no storage data
-  if (GPSdata.deviceStatus.storage.percent < 90) {
+  // if (GPSdata.deviceStatus.storage.percent < 90) {
     if (flag) {
       writeStream = fs.createWriteStream(`${fileName}.bin`);
       flag = false
     }
     writeStream.write(data)
-  }
+  // }
 }
 
 const startInterval = (TimeOut) => {
