@@ -110,6 +110,7 @@ const handleManageCommands = (command, res, data) => {
       break;
     case 'startNTRIP':
       // TODO test this !!
+      // TODO IMPORTANT : remember to get data from DB **************
       startProcess()
       messagesToWatchdog(WDCommands.ntripStart)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
