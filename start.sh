@@ -1,3 +1,4 @@
+#!/bin/bash
 # To start all processes and workers and configure runtime environment 
 
 # Function to send messages to stderr
