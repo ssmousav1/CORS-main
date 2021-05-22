@@ -4,12 +4,15 @@ const fs = require("fs");
 // const EventLib = require("../util/Eventlib");
 // const eventlib = new EventLib().getInstance();
 
+let NTRIPObject 
+
 // Generate env file for starting NTRIP
 const envGen = (params) => {
   let ntripArgs = [
     `SPORT=${params.serialPort}`,
     `BRATE=${params.baudrate}`,
-    `OUTPUT=${params.output}`,
+    `OUTPUT=3`,
+    // `OUTPUT=${params.output}`,
     `CASTER=${params.destAddress}`,
     `CPORT=${params.destPort}`,
     `MOUNTPOINT=${params.mounpoint}`,
@@ -25,7 +28,7 @@ const envGen = (params) => {
 }
 
 // Runs before new NTRIP spawn to clear extra containers
-const killallProc = (name) => {
+const killallProcess = (name) => {
   let raw = cmd.runSync(
     `docker ps -aq --filter name=${name} | xargs docker stop`
   );
@@ -48,7 +51,7 @@ const killallProc = (name) => {
   }
 }
 
-const startProc = (name) => {
+const startProcess = (name = NTRIPObject.NTRIP) => {
   let raw = cmd.runSync(`docker start ${name}`);
   if (raw.data) {
     // eventlib.emit("msg:log", { status: 500, msg: raw.data });
@@ -59,7 +62,7 @@ const startProc = (name) => {
   }
 }
 
-const getUptime = (name) => {
+const getUptime = (name = NTRIPObject.NTRIP) => {
   let raw = cmd.runSync(`docker ps | grep ${name}`);
   if (raw.data) {
     // eventlib.emit("msg:log", { status: 200, msg: raw.data });
@@ -75,7 +78,7 @@ const getUptime = (name) => {
 const createNTRIP = (params) => {
   let container = `cors-ntrip-${params.mounpoint}`;
   console.log(`container: ${container}`);
-  killallProc("cors-ntrip*");
+  killallProcess("cors-ntrip*");
   envGen(params);
   console.log("done wiritng env to file");
   let raw = cmd.runSync(
@@ -84,6 +87,7 @@ const createNTRIP = (params) => {
   if (raw.data) {
     // eventlib.emit("msg:log", { status: 200, msg: raw.data });
     console.log("creating container: " + raw.data);
+    NTRIPObject.NTRIP = container
     return container;
   } else {
     // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
@@ -91,7 +95,7 @@ const createNTRIP = (params) => {
   }
 }
 
-const restartProc = (name) => {
+const stopProcess = (name = NTRIPObject.NTRIP) => {
   let raw = cmd.runSync(`docker restart ${name}`);
   if (raw.data) {
     // eventlib.emit("msg:log", { status: 200, msg: raw.data });
@@ -102,7 +106,7 @@ const restartProc = (name) => {
   }
 }
 
-const stopProc = (name) => {
+const restartProcess = (name) => {
   let raw = cmd.runSync(`docker stop ${name}`);
   if (raw.data) {
     // eventlib.emit("msg:log", { status: 200, msg: raw.data });
@@ -113,7 +117,7 @@ const stopProc = (name) => {
   }
 }
 
-const getStatusNTRIP = (name) => {
+const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
   cmd.run(`docker logs -n 1 ${name}`, (err, data, stderr) => {
     let raw = stderr.split("\n");
     if (raw[0].includes("transfering data")) {
@@ -125,7 +129,7 @@ const getStatusNTRIP = (name) => {
       // });
     } else if (raw[0].includes("Conflict. The container name")) {
       // TODO Dangerous move - needs change
-      killallProc("cors-ntrip*");
+      killallProcess("cors-ntrip*");
       getStatusNTRIP(name);
     } else if (raw[0].includes("ERROR: opening serial")) {
       // eventlib.emit("ntrip-proc:status", {
@@ -154,7 +158,7 @@ const getStatusNTRIP = (name) => {
 
 // const createMain = (port = 3001) => {
 //   let container = `cors-main`;
-//   killallProc(container);
+//   killallProcess(container);
 //   console.log(`container: ${container}`);
 //   let raw = cmd.runSync(
 //     `docker run -d --restart=always -v /dev:/dev -v /run/udev:/run/udev:ro -v cors-db:/app --name=${container} --network='host' --env-file /home/debian/.cors/.main-env --device=/dev/ttyO1 --device=/dev/ttyO2 --device=/dev/ttyO5 hirodevelop/cors-main`
@@ -169,7 +173,7 @@ const getStatusNTRIP = (name) => {
 
 // function createWeb(port = 80) {
 //   let container = `cors-web`;
-//   killallProc(container);
+//   killallProcess(container);
 //   console.log(`container: ${container}`);
 //   // let raw = cmd.runSync(
 //   //   `docker run -d --restart=always --name=${container} -p ${port}:80 hirodevelop/cors-web`
@@ -197,9 +201,10 @@ const getStatusNTRIP = (name) => {
 module.exports = {
   // createMain,
   createNTRIP,
-  startProc,
-  stopProc,
-  restartProc,
+  startProcess,
+  stopProcess,
+  restartProcess,
   getStatusNTRIP,
   getUptime,
+  NTRIPObject
 };
