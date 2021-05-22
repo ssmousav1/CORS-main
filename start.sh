@@ -42,8 +42,8 @@ config-pin P8_38 uart
 # source env-file
 # printenv | grep UD
 
-# ip a add $UD_IP dev eth0
-# route add default gw $UD_GW
+ifconfig eth0 $UD_IP netmask $UD_NMASK
+route add default gw $UD_GW
 # echo "nameserver ${UD_NS}" > /etc/resolv.conf
 
 # echo "Configuration done, Current config:"
@@ -58,4 +58,3 @@ config-pin P8_38 uart
 
 # Set timezone
 timedatectl set-timezone Asia/Tehran
-
