@@ -28,6 +28,7 @@
     "gps": "^0.6.0",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
+    "network-calculator": "^2.0.1",
     "nmea-simple": "^3.2.0",
     "node-cmd": "^4.0.0",
     "serialport": "^9.0.1",
