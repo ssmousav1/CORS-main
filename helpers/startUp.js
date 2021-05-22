@@ -1,3 +1,4 @@
+const cmd = require('node-cmd');
 // const ConfigCommand = require("./configCommands");
 const { NMEAPort } = require("./globalPorts");
 const {
@@ -58,6 +59,24 @@ const wholeConf = [
 const startUp = () => {
   console.log("start up");
   logger.log("app started");
+
+
+  // fix scripts/config.sh mod
+
+  cmd.run(
+    `chmod +x ../scripts/config.sh`,
+    function (err, data, stderr) {
+      console.log('chmod +x script/config.sh ', data)
+      if (err) {
+        console.error('error in chmod script/config.sh :', err)
+      }
+      if (stderr) {
+        console.error('error in chmod script/config.sh :', stderr)
+      }
+    }
+  );
+
+
   // send data to watchdog at startup
   statusMessagesToWatchdog(LEDCommands.antConf);
   statusMessagesToWatchdog(LEDCommands.netConf);
