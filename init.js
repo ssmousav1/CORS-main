@@ -3,7 +3,12 @@ const cmd = require("node-cmd");
 
 // let pm2 = `/home/debian/.npm-global/bin/pm2`;
 
-let commands = [`sudo ./start.sh`, `node config19.js`, `node config115.js`];
+let commands = [
+  `sudo ./start.sh`,
+  `node config19.js`,
+  `node config115.js`,
+  `node net-conf.js`,
+];
 
 commands.forEach((command) => {
   let res;
