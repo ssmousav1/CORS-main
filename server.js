@@ -47,6 +47,7 @@ const managementRouter = require("./api/management");
 const { socketMessages } = require("./helpers/socketMessages");
 const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
 const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
+const { setIP } = require("./helpers/netConfig");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const NMEAparser = NMEAPort.pipe(new Readline({ delimiter: "\r\n" }));
@@ -56,8 +57,7 @@ const server = new WebSocket.Server({
   server: app.listen(process.env.MAIN_PORT || 3001, () => {
     startUp();
     console.log(
-      `Example app listening at http://localhost:${
-        process.env.MAIN_PORT || 3001
+      `Example app listening at http://localhost:${process.env.MAIN_PORT || 3001
       }`
     );
   }),
@@ -105,7 +105,7 @@ NMEAparser.on("data", (data) => {
     const packet = nmea.parseNmeaSentence(data);
     eventEmitter.emit("WSData");
     handleWebSocket(packet);
-  } catch (e) {}
+  } catch (e) { }
 });
 
 rawDataPort.on("data", (data) => {
@@ -113,6 +113,13 @@ rawDataPort.on("data", (data) => {
   // console.log(data.toString());
   saveRawData(data);
 });
+
+setIP({
+  ip: 'req.body.ip',
+  subnet: 'req.body.subnet',
+  gateway: 'req.body.gateway',
+  nameserver: ' req.body.nameserver'
+})
 
 setInterval(() => {
   if (Date.now() - rawdataTime < 30000) {
