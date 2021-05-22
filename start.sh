@@ -39,6 +39,8 @@ config-pin P8_37 uart
 config-pin P8_38 uart
 
 source env-file
+
+./netconfig.sh
 # Configure network
 # echo "Configuring the network"
 # source env-file
