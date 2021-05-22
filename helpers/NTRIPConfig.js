@@ -152,20 +152,20 @@ const getStatusNTRIP = (name) => {
   });
 }
 
-const createMain = (port = 3001) => {
-  let container = `cors-main`;
-  killallProc(container);
-  console.log(`container: ${container}`);
-  let raw = cmd.runSync(
-    `docker run -d --restart=always -v /dev:/dev -v /run/udev:/run/udev:ro -v cors-db:/app --name=${container} --network='host' --env-file /home/debian/.cors/.main-env --device=/dev/ttyO1 --device=/dev/ttyO2 --device=/dev/ttyO5 hirodevelop/cors-main`
-  );
-  if (raw.data) {
-    console.log("creating main container: " + raw.data);
-    return container;
-  } else {
-    console.error("createMain >>>>>>>>>>>" + raw.stderr);
-  }
-}
+// const createMain = (port = 3001) => {
+//   let container = `cors-main`;
+//   killallProc(container);
+//   console.log(`container: ${container}`);
+//   let raw = cmd.runSync(
+//     `docker run -d --restart=always -v /dev:/dev -v /run/udev:/run/udev:ro -v cors-db:/app --name=${container} --network='host' --env-file /home/debian/.cors/.main-env --device=/dev/ttyO1 --device=/dev/ttyO2 --device=/dev/ttyO5 hirodevelop/cors-main`
+//   );
+//   if (raw.data) {
+//     console.log("creating main container: " + raw.data);
+//     return container;
+//   } else {
+//     console.error("createMain >>>>>>>>>>>" + raw.stderr);
+//   }
+// }
 
 // function createWeb(port = 80) {
 //   let container = `cors-web`;
@@ -195,7 +195,7 @@ const createMain = (port = 3001) => {
 // });
 
 module.exports = {
-  createMain,
+  // createMain,
   createNTRIP,
   startProc,
   stopProc,
