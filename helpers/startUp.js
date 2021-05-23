@@ -64,14 +64,14 @@ const startUp = () => {
   // fix scripts/config.sh mod
 
   cmd.run(
-    `chmod +x ../scripts/config.sh`,
+    `sudo ./commands/set-ip.sh`,
     function (err, data, stderr) {
-      console.log('chmod +x script/config.sh ', data)
+      console.log('sudo ./commands/set-ip.sh ', data)
       if (err) {
-        console.error('error in chmod script/config.sh :', err)
+        console.error('error in sudo ./commands/set-ip.sh :', err)
       }
       if (stderr) {
-        console.error('error in chmod script/config.sh :', stderr)
+        console.error('error in sudo ./commands/set-ip.sh :', stderr)
       }
     }
   );
