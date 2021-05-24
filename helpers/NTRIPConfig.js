@@ -30,7 +30,7 @@ const envGen = (params) => {
 // Runs before new NTRIP spawn to clear extra containers
 const killallProcess = () => {
   cmd.run(
-    `pm2 stop NTRIP/startntripserver.sh`,
+    `pm2 del startntripserver.sh`,
     (err, data, stderr) => {
       console.log('examples dir now contains the example file along with : ', data)
       console.log('examples dir now contains the example file along with : ', err)
@@ -42,7 +42,7 @@ const killallProcess = () => {
 const startProcess = () => {
   console.log('starting ntrip');
   cmd.run(
-    `pm2 start NTRIP/startntripserver.sh`,
+    `pm2 start startntripserver.sh`,
     function (err, data, stderr) {
       console.log('examples dir now contains the example file along with : ', data)
       console.log('examples dir now contains the example file along with : ', err)
@@ -52,17 +52,6 @@ const startProcess = () => {
 }
 
 const getUptime = () => {
-  // let raw = cmd.runSync(`docker ps | grep ${name}`);
-  // if (raw.data) {
-  //   // eventlib.emit("msg:log", { status: 200, msg: raw.data });
-  //   console.log(`starting container: ${name}`);
-  //   raw = raw.data.split("  ");
-  //   return { uptime: raw[5] };
-  // } else {
-  //   // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-  //   console.error(">>>>>>>>> " + raw.stderr);
-  // }
-
   cmd.run(
     `pm2 status`,
     function (err, data, stderr) {
@@ -71,29 +60,29 @@ const getUptime = () => {
   );
 }
 
-const createNTRIP = (params) => {
-  let container = `cors-ntrip-${params.mounpoint}`;
-  console.log(`container: ${container}`);
-  killallProcess("cors-ntrip*");
-  envGen(params);
-  console.log("done wiritng env to file");
-  let raw = cmd.runSync(
-    `docker run -d -v /dev:/dev -v /run/udev:/run/udev:ro --name=${container} --network='host' --device=/dev/ttyO4 --env-file ntrip-env hirodevelop/cors-ntripserver`
-  );
-  if (raw.data) {
-    // eventlib.emit("msg:log", { status: 200, msg: raw.data });
-    console.log("creating container: " + raw.data);
-    NTRIPObject.NTRIP = container
-    return container;
-  } else {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-    console.error(">>>>>>>>>>>" + raw.stderr);
-  }
-}
+// const createNTRIP = (params) => {
+//   let container = `cors-ntrip-${params.mounpoint}`;
+//   console.log(`container: ${container}`);
+//   killallProcess("cors-ntrip*");
+//   envGen(params);
+//   console.log("done wiritng env to file");
+//   let raw = cmd.runSync(
+//     `docker run -d -v /dev:/dev -v /run/udev:/run/udev:ro --name=${container} --network='host' --device=/dev/ttyO4 --env-file ntrip-env hirodevelop/cors-ntripserver`
+//   );
+//   if (raw.data) {
+//     // eventlib.emit("msg:log", { status: 200, msg: raw.data });
+//     console.log("creating container: " + raw.data);
+//     NTRIPObject.NTRIP = container
+//     return container;
+//   } else {
+//     // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
+//     console.error(">>>>>>>>>>>" + raw.stderr);
+//   }
+// }
 
-const stopProcess = (name = NTRIPObject.NTRIP) => {
+const stopProcess = () => {
   cmd.run(
-    `pm2 stop NTRIP/startntripserver.sh`,
+    `pm2 stop startntripserver.sh`,
     function (err, data, stderr) {
       console.log('examples dir now contains the example file along with : ', data)
     }
@@ -102,19 +91,9 @@ const stopProcess = (name = NTRIPObject.NTRIP) => {
 
 const restartProcess = (name) => {
   cmd.run(
-    `pm2 stop NTRIP/startntripserver.sh`,
+    `pm2 restart startntripserver.sh`,
     function (err, data, stderr) {
       console.log('examples dir now contains the example file along with : ', data)
-      if (err || stderr) {
-
-      } else {
-        cmd.run(
-          `pm2 start NTRIP/startntripserver.sh`,
-          function (err, data, stderr) {
-            console.log('examples dir now contains the example file along with : ', data)
-          }
-        );
-      }
     }
   );
 }
