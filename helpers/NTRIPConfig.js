@@ -40,10 +40,13 @@ const killallProcess = () => {
 }
 
 const startProcess = () => {
+  console.log('starting ntrip');
   cmd.run(
     `pm2 start NTRIP/startntripserver.sh`,
     function (err, data, stderr) {
       console.log('examples dir now contains the example file along with : ', data)
+      console.log('examples dir now contains the example file along with : ', err)
+      console.log('examples dir now contains the example file along with : ', stderr)
     }
   );
 }
