@@ -15,7 +15,7 @@ const gatewayAccess = () => {
           statusMessagesToWatchdog(LEDCommands.netNone)
         } else {
           if (data[0]) {
-		console.log(data[0])
+		// console.log(data[0])
             try {
               cmd.run(`ping ${JSON.parse(data[0].value).gateway} -c4`, (err, data, stderr) => {
                 if (err) {

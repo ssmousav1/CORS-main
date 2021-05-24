@@ -1,6 +1,6 @@
 FROM node:12
 
-# Create app directory
+# Create app directory 
 WORKDIR /app
 
 # Install app dependencies
