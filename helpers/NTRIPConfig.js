@@ -8,23 +8,16 @@ let NTRIPObject
 
 // Generate env file for starting NTRIP
 const envGen = (params) => {
-  let ntripArgs = [
-    `SPORT=${params.serialPort}`,
-    `BRATE=${params.baudrate}`,
-    `OUTPUT=3`,
-    // `OUTPUT=${params.output}`,
-    `CASTER=${params.destAddress}`,
-    `CPORT=${params.destPort}`,
-    `MOUNTPOINT=${params.mounpoint}`,
-    // `CUSER=${params.destUser}`,
-    `CPASS=${params.destPass}`,
-  ];
-
-  cmd.runSync("rm ntrip-env");
-  ntripArgs.forEach((element) => {
-    fs.appendFileSync("ntrip-env", `${element}\n`);
-    console.log(`${element}\n`);
-  });
+  Object.keys(params).forEach(envName => {
+    cmd.run(
+      `export ${envName}=${params[envName]}`,
+      function (err, data, stderr) {
+        console.log('setting new envs : ', envName, params[envName], data)
+        console.log('setting new envs : ', envName, params[envName], err)
+        console.log('setting new envs : ', envName, params[envName], stderr)
+      }
+    );
+  })
 }
 
 // Runs before new NTRIP spawn to clear extra containers
@@ -187,5 +180,6 @@ module.exports = {
   restartProcess,
   getStatusNTRIP,
   getUptime,
-  NTRIPObject
+  NTRIPObject,
+  envGen
 };

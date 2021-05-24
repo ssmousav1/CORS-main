@@ -12,7 +12,7 @@ const { checkNTRIP } = require("./checkNTRIP");
 // const { configStop, configNMEA, configSave, configBaudRate } = require("./configPorts");
 const { configRAW, configNMEA, configRTCM } = require("./configPorts");
 const { userDB } = require("../DB");
-const { startProcess } = require('./NTRIPConfig');
+const { startProcess, envGen } = require('./NTRIPConfig');
 
 const logger = new Logger().getInstance();
 
@@ -61,7 +61,8 @@ const startUp = () => {
   console.log("start up");
   logger.log("app started");
 
-  startProcess()
+  // startProcess()
+  envGen({TEST:'ssm'})
 
   // fix scripts/config.sh mod
 
