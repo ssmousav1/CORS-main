@@ -103,6 +103,7 @@ NMEAparser.on("data", (data) => {
   try {
     const packet = nmea.parseNmeaSentence(data);
     eventEmitter.emit("WSData");
+//	console.log(packet)
     handleWebSocket(packet);
   } catch (e) { }
 });

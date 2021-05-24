@@ -19,7 +19,7 @@ const setIP = (params) => {
     const command = `ip addr add ${ip}/${bitmask} dev eth0`;
     fs.writeFileSync(`${pathBASE}/commands/set-ip.sh`, command);
     console.log("success creating ip file!");
-    raw = cmd.runSync(`${pathBASE}/scripts/config.sh ip`);
+    raw = cmd.runSync(`sudo ${pathBASE}/scripts/config.sh ip`);
     console.log(raw);
     // eventlib.emit("msg:log", { status: 200, msg: "Done configuring IP" });
   } catch (error) {

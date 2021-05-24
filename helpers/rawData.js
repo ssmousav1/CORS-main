@@ -10,13 +10,14 @@ const eventlib = new eventEmitterBuilder().getInstance();
 let flag = true
 let fileName = new Date(GPSdata.time).getTime() || Date.now()
 // let fileName = Date.now();
-let timeOut = 60 * 1000 * 60
+let timeOut = 60 * 1000 * 5
 let intervalId;
 
 let writeStream
 
 
 const saveRawData = (data) => {
+//	console.log(new Date(GPSdata.time).getTime())
   // TODO disable this condition if there is no storage data
   // if (GPSdata.deviceStatus.storage.percent < 90) {
     if (flag) {
