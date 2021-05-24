@@ -4,7 +4,7 @@ const fs = require("fs");
 // const EventLib = require("../util/Eventlib");
 // const eventlib = new EventLib().getInstance();
 
-let NTRIPObject 
+let NTRIPObject
 
 // Generate env file for starting NTRIP
 const envGen = (params) => {
@@ -28,51 +28,44 @@ const envGen = (params) => {
 }
 
 // Runs before new NTRIP spawn to clear extra containers
-const killallProcess = (name) => {
-  let raw = cmd.runSync(
-    `docker ps -aq --filter name=${name} | xargs docker stop`
-  );
-
-  if (raw.data) {
-    raw = cmd.runSync(`docker ps -aq --filter name=${name} | xargs docker rm`);
-    if (raw.stderr) {
-      // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-      console.log("Killall running");
-      console.error(raw.stderr);
-    } else {
-      // eventlib.emit("msg:log", { status: 200, msg: raw.data });
-      console.log("Killall running");
-      console.log(raw.data);
+const killallProcess = () => {
+  cmd.run(
+    `pm2 stop NTRIP/startntripserver.sh`,
+    (err, data, stderr) => {
+      console.log('examples dir now contains the example file along with : ', data)
+      console.log('examples dir now contains the example file along with : ', err)
+      console.log('examples dir now contains the example file along with : ', stderr)
     }
-  } else {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-    console.log("Killall running");
-    console.error(raw.stderr);
-  }
+  );
 }
 
-const startProcess = (name = NTRIPObject.NTRIP) => {
-  let raw = cmd.runSync(`docker start ${name}`);
-  if (raw.data) {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.data });
-    console.log(`starting container: ${name}`);
-  } else {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-    console.error(">>>>>>>>> " + raw.stderr);
-  }
+const startProcess = () => {
+  cmd.run(
+    `pm2 start NTRIP/startntripserver.sh`,
+    function (err, data, stderr) {
+      console.log('examples dir now contains the example file along with : ', data)
+    }
+  );
 }
 
-const getUptime = (name = NTRIPObject.NTRIP) => {
-  let raw = cmd.runSync(`docker ps | grep ${name}`);
-  if (raw.data) {
-    // eventlib.emit("msg:log", { status: 200, msg: raw.data });
-    console.log(`starting container: ${name}`);
-    raw = raw.data.split("  ");
-    return { uptime: raw[5] };
-  } else {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-    console.error(">>>>>>>>> " + raw.stderr);
-  }
+const getUptime = () => {
+  // let raw = cmd.runSync(`docker ps | grep ${name}`);
+  // if (raw.data) {
+  //   // eventlib.emit("msg:log", { status: 200, msg: raw.data });
+  //   console.log(`starting container: ${name}`);
+  //   raw = raw.data.split("  ");
+  //   return { uptime: raw[5] };
+  // } else {
+  //   // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
+  //   console.error(">>>>>>>>> " + raw.stderr);
+  // }
+
+  cmd.run(
+    `pm2 status`,
+    function (err, data, stderr) {
+      console.log('examples dir now contains the example file along with : ', data)
+    }
+  );
 }
 
 const createNTRIP = (params) => {
@@ -96,25 +89,31 @@ const createNTRIP = (params) => {
 }
 
 const stopProcess = (name = NTRIPObject.NTRIP) => {
-  let raw = cmd.runSync(`docker restart ${name}`);
-  if (raw.data) {
-    // eventlib.emit("msg:log", { status: 200, msg: raw.data });
-    console.log("restart container: " + raw.data);
-  } else {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-    console.error("restart container >>>>>>>>>>>" + raw.stderr);
-  }
+  cmd.run(
+    `pm2 stop NTRIP/startntripserver.sh`,
+    function (err, data, stderr) {
+      console.log('examples dir now contains the example file along with : ', data)
+    }
+  );
 }
 
 const restartProcess = (name) => {
-  let raw = cmd.runSync(`docker stop ${name}`);
-  if (raw.data) {
-    // eventlib.emit("msg:log", { status: 200, msg: raw.data });
-    console.log("stopping container: " + raw.data);
-  } else {
-    // eventlib.emit("msg:log", { status: 500, msg: raw.stderr });
-    console.log("stopping container >>>>>>>>>>>" + raw.stderr);
-  }
+  cmd.run(
+    `pm2 stop NTRIP/startntripserver.sh`,
+    function (err, data, stderr) {
+      console.log('examples dir now contains the example file along with : ', data)
+      if (err || stderr) {
+
+      } else {
+        cmd.run(
+          `pm2 start NTRIP/startntripserver.sh`,
+          function (err, data, stderr) {
+            console.log('examples dir now contains the example file along with : ', data)
+          }
+        );
+      }
+    }
+  );
 }
 
 const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
@@ -149,7 +148,7 @@ const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
       //   status: 501,
       //   msg: "Output mode not supported",
       // });
-    } else 
+    } else
       eventlib.emit("ntrip-proc:status", {
         status: 500,
       });
