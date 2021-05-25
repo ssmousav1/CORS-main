@@ -53,7 +53,7 @@ const startProcess = (params = null) => {
         if (data[0]) {
           console.log('starting ntrip');
           cmd.run(
-            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${data[0].value.host} CPORT=${data[0].value.port} MOUNTPOINT=${data[0].value.mountpoint} CPASS=${data[0].value.pass} pm2 start startntripserver.sh `,
+            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh `,
             function (err, data, stderr) {
               console.log('examples dir now contains the example file along with : ', data)
               console.log('examples dir now contains the example file along with : ', err)
