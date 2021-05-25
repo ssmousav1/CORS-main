@@ -78,7 +78,14 @@ const startUp = () => {
   //     }
   //   }
   // );
-
+  cmd.run(
+    'sudo ./netconfig.sh',
+    function (err, data, stderr) {
+      console.log('sudo ./netconfig.sh', data)
+      console.log('sudo ./netconfig.sh', err)
+      console.log('sudo ./netconfig.sh', stderr)
+    }
+  );
 
   // send data to watchdog at startup
   statusMessagesToWatchdog(LEDCommands.antConf);
