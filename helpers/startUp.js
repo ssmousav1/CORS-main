@@ -62,22 +62,22 @@ const startUp = () => {
   logger.log("app started");
 
   // startProcess()
-  envGen({TEST:'ssm'})
+  // envGen({TEST:'ssm'})
 
   // fix scripts/config.sh mod
 
-  cmd.run(
-    `sudo ./commands/set-ip.sh`,
-    function (err, data, stderr) {
-      console.log('sudo ./commands/set-ip.sh ', data)
-      if (err) {
-        console.error('error in sudo ./commands/set-ip.sh :', err)
-      }
-      if (stderr) {
-        console.error('error in sudo ./commands/set-ip.sh :', stderr)
-      }
-    }
-  );
+  // cmd.run(
+  //   `sudo ./commands/set-ip.sh`,
+  //   function (err, data, stderr) {
+  //     console.log('sudo ./commands/set-ip.sh ', data)
+  //     if (err) {
+  //       console.error('error in sudo ./commands/set-ip.sh :', err)
+  //     }
+  //     if (stderr) {
+  //       console.error('error in sudo ./commands/set-ip.sh :', stderr)
+  //     }
+  //   }
+  // );
 
 
   // send data to watchdog at startup

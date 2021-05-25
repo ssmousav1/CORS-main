@@ -174,7 +174,7 @@ const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
 
 module.exports = {
   // createMain,
-  createNTRIP,
+  // createNTRIP,
   startProcess,
   stopProcess,
   restartProcess,
