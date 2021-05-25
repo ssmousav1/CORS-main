@@ -34,19 +34,17 @@ const killallProcess = () => {
 }
 
 const startProcess = (params = null) => {
-  let command
 
   if (params) {
-    command = `
-    SPORT=/dev/ttyO4
-    BRATE=115200
-    OUTPUT=2
-    CASTER=${params.host}
-    CPORT=${params.port}
-    MOUNTPOINT=${params.mountpoint}
-    CPASS=${params.pass}
-    pm2 start startntripserver.sh
-    `
+
+    cmd.run(
+      `SPORT=/dev/ttyO4 BRATE=115200 OUTPUT=2 CASTER=${params.host} CPORT=${params.port} MOUNTPOINT=${params.mountpoint} CPASS=${params.pass} pm2 start startntripserver.sh`,
+      function (err, data, stderr) {
+        console.log('examples dir now contains the example file along with : ', data)
+        console.log('examples dir now contains the example file along with : ', err)
+        console.log('examples dir now contains the example file along with : ', stderr)
+      }
+    );
   } else {
     userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
       if (err) {
@@ -54,16 +52,14 @@ const startProcess = (params = null) => {
       } else {
         if (data[0]) {
           console.log('starting ntrip');
-          command = `
-          SPORT=/dev/ttyO4
-          BRATE=115200
-          OUTPUT=2
-          CASTER=${data[0].value.host}
-          CPORT=${data[0].value.port}
-          MOUNTPOINT=${data[0].value.mountpoint}
-          CPASS=${data[0].value.pass}
-          pm2 start startntripserver.sh
-          `
+          cmd.run(
+            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${data[0].value.host} CPORT=${data[0].value.port} MOUNTPOINT=${data[0].value.mountpoint} CPASS=${data[0].value.pass} pm2 start startntripserver.sh `,
+            function (err, data, stderr) {
+              console.log('examples dir now contains the example file along with : ', data)
+              console.log('examples dir now contains the example file along with : ', err)
+              console.log('examples dir now contains the example file along with : ', stderr)
+            }
+          );
         } else {
           return 0
         }
@@ -71,14 +67,6 @@ const startProcess = (params = null) => {
     });
   }
 
-  cmd.run(
-    command,
-    function (err, data, stderr) {
-      console.log('examples dir now contains the example file along with : ', data)
-      console.log('examples dir now contains the example file along with : ', err)
-      console.log('examples dir now contains the example file along with : ', stderr)
-    }
-  );
 }
 
 const getUptime = () => {
