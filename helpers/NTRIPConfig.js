@@ -119,11 +119,58 @@ const stopProcess = () => {
   );
 }
 
-const restartProcess = (name) => {
+const restartProcess = (params) => {
+  let command
+
+  if (params) {
+    command = `
+    SPORT=/dev/ttyO4
+    BRATE=115200
+    OUTPUT=2
+    CASTER=${params.host}
+    CPORT=${params.port}
+    MOUNTPOINT=${params.mountpoint}
+    CPASS=${params.pass}
+    pm2 start startntripserver.sh
+    `
+  } else {
+    userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
+      if (err) {
+        console.error('there is an error from loading data from database : ****', err);
+      } else {
+        if (data[0]) {
+          console.log('starting ntrip');
+          command = `
+          SPORT=/dev/ttyO4
+          BRATE=115200
+          OUTPUT=2
+          CASTER=${data[0].value.host}
+          CPORT=${data[0].value.port}
+          MOUNTPOINT=${data[0].value.mountpoint}
+          CPASS=${data[0].value.pass}
+          pm2 start startntripserver.sh
+          `
+        } else {
+          return 0
+        }
+      }
+    });
+  }
   cmd.run(
-    `pm2 restart startntripserver.sh`,
+    `pm2 stop startntripserver.sh`,
     function (err, data, stderr) {
-      console.log('examples dir now contains the example file along with : ', data)
+      if (err || stderr) {
+
+      } else {
+        cmd.run(
+          command,
+          function (err, data, stderr) {
+            console.log('examples dir now contains the example file along with : ', data)
+            console.log('examples dir now contains the example file along with : ', err)
+            console.log('examples dir now contains the example file along with : ', stderr)
+          }
+        );
+      }
     }
   );
 }

@@ -4,7 +4,7 @@ const { validationResult } = require('express-validator');
 // const { killNTRIP, startNTRIP } = require('../helpers/NTRIP');
 const { messagesToWatchdog } = require('../helpers/watchdogInterface');
 const { WDCommands } = require('../helpers/messages');
-const { startProcess } = require('../helpers/NTRIPConfig');
+const { restartProcess } = require('../helpers/NTRIPConfig');
 
 casterRoutes.get('/', (req, res) => {
   userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
@@ -56,7 +56,7 @@ casterRoutes.put('/', (req, res) => {
           })
           // TODO comment this function to disable using WD helpers 
           // ps : test it !!
-          startProcess({
+          restartProcess({
             host: req.body.hostAddress,
             port: req.body.port,
             mountpoint: req.body.mountpoint,
