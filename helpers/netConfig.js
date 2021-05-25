@@ -34,6 +34,15 @@ const setNetwork = ({ ip, mask, gateway }) => {
   contents = `route add default gw ${gateway}\r\n`;
   fs.appendFileSync(fd, contents, { mode: 511 });
   fs.closeSync(fd);
+
+  cmd.run(
+    'sudo ./netconfig.sh',
+    function (err, data, stderr) {
+      console.log('sudo ./netconfig.sh', data)
+      console.log('sudo ./netconfig.sh', err)
+      console.log('sudo ./netconfig.sh', stderr)
+    }
+  );
 }
 
 module.exports = { setIP, setNetwork }

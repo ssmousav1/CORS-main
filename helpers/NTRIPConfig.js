@@ -175,44 +175,44 @@ const restartProcess = (params) => {
   );
 }
 
-const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
-  cmd.run(`docker logs -n 1 ${name}`, (err, data, stderr) => {
-    let raw = stderr.split("\n");
-    if (raw[0].includes("transfering data")) {
-      // eventlib.emit("ntrip-proc:status", { status: 200 });
-    } else if (raw[0].includes("can't connect")) {
-      // eventlib.emit("ntrip-proc:status", {
-      //   status: 400,
-      //   msg: "Wrong/Inaccessible destination provided",
-      // });
-    } else if (raw[0].includes("Conflict. The container name")) {
-      // TODO Dangerous move - needs change
-      killallProcess("cors-ntrip*");
-      getStatusNTRIP(name);
-    } else if (raw[0].includes("ERROR: opening serial")) {
-      // eventlib.emit("ntrip-proc:status", {
-      //   status: 503,
-      //   msg: "Serial not configured",
-      // });
-    } else if (
-      raw[0].includes("ERROR: more than 120") ||
-      raw[0].includes("WARNING: reading input failed")
-    ) {
-      // eventlib.emit("ntrip-proc:status", {
-      //   status: 408,
-      //   msg: "No data on port",
-      // });
-    } else if (raw[0].includes("ERROR: Destination caster's reply is not OK")) {
-      // eventlib.emit("ntrip-proc:status", {
-      //   status: 501,
-      //   msg: "Output mode not supported",
-      // });
-    } else
-      eventlib.emit("ntrip-proc:status", {
-        status: 500,
-      });
-  });
-}
+// const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
+//   cmd.run(`docker logs -n 1 ${name}`, (err, data, stderr) => {
+//     let raw = stderr.split("\n");
+//     if (raw[0].includes("transfering data")) {
+//       // eventlib.emit("ntrip-proc:status", { status: 200 });
+//     } else if (raw[0].includes("can't connect")) {
+//       // eventlib.emit("ntrip-proc:status", {
+//       //   status: 400,
+//       //   msg: "Wrong/Inaccessible destination provided",
+//       // });
+//     } else if (raw[0].includes("Conflict. The container name")) {
+//       // TODO Dangerous move - needs change
+//       killallProcess("cors-ntrip*");
+//       getStatusNTRIP(name);
+//     } else if (raw[0].includes("ERROR: opening serial")) {
+//       // eventlib.emit("ntrip-proc:status", {
+//       //   status: 503,
+//       //   msg: "Serial not configured",
+//       // });
+//     } else if (
+//       raw[0].includes("ERROR: more than 120") ||
+//       raw[0].includes("WARNING: reading input failed")
+//     ) {
+//       // eventlib.emit("ntrip-proc:status", {
+//       //   status: 408,
+//       //   msg: "No data on port",
+//       // });
+//     } else if (raw[0].includes("ERROR: Destination caster's reply is not OK")) {
+//       // eventlib.emit("ntrip-proc:status", {
+//       //   status: 501,
+//       //   msg: "Output mode not supported",
+//       // });
+//     } else
+//       eventlib.emit("ntrip-proc:status", {
+//         status: 500,
+//       });
+//   });
+// }
 
 // const createMain = (port = 3001) => {
 //   let container = `cors-main`;
