@@ -81,13 +81,13 @@ const configRTCM = (writePort, params = null) => {
   }
   const commands = [
     // Reset
-    `$JOFF,PORTC\r\n`,
+    // `$JOFF,PORTC\r\n`,
     // FIXPOS
     `$JRTK,1,${lat},${lon},${alt}\r\n`,
     // RTCM
-    `$JASC,RTCM3,1,PORTC\r\n`,
+    // `$JASC,RTCM3,1,PORTC\r\n`,
     // Baudrate
-    `$JBAUD,115200,PORTC\r\n`,
+    // `$JBAUD,115200,PORTC\r\n`,
     // Save
     `$JSAVE\r\n`,
   ];
