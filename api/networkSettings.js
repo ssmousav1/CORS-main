@@ -3,7 +3,7 @@ const networkRoutes = require('express').Router();
 const { validationResult } = require('express-validator');
 const { messagesToWatchdog } = require("../helpers/watchdogInterface");
 const { WDCommands } = require('../helpers/messages');
-const { setIP } = require('../helpers/netConfig');
+const { setIP, setNetwork } = require('../helpers/netConfig');
 
 networkRoutes.get('/', (req, res) => {
   userDB.all(`SELECT value  FROM setting WHERE key = 'network'`, (err, data) => {
@@ -63,9 +63,15 @@ networkRoutes.put('/', (req, res) => {
             nameserver: req.body.nameserver
           })
           // TODO comment this to disable using WD helper functions 
-          setIP({
+          // setIP({
+          //   ip: req.body.ip,
+          //   subnet: req.body.subnet,
+          //   gateway: req.body.gateway,
+          //   nameserver: req.body.nameserver
+          // })
+          setNetwork({
             ip: req.body.ip,
-            subnet: req.body.subnet,
+            mask: req.body.subnet,
             gateway: req.body.gateway,
             nameserver: req.body.nameserver
           })

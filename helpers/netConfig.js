@@ -27,7 +27,7 @@ const setIP = (params) => {
   }
 }
 
-const setNetwork = (ip, mask, gateway) => {
+const setNetwork = ({ ip, mask, gateway }) => {
   let fd = fs.openSync("netconfig.sh", "w", 0o777);
   let contents = `ifconfig eth0 ${ip} netmask ${mask}\r\n`;
   fs.appendFileSync(fd, contents, { mode: 511 });
