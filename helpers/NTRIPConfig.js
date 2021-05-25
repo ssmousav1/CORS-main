@@ -262,7 +262,7 @@ module.exports = {
   startProcess,
   stopProcess,
   restartProcess,
-  getStatusNTRIP,
+  // getStatusNTRIP,
   getUptime,
   NTRIPObject,
   envGen
