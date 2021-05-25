@@ -129,7 +129,8 @@ const handleManageCommands = (command, res, data) => {
       break;
     case 'newNTRIP':
       // TODO test this !!
-      createNTRIP(data)
+      // createNTRIP(data)
+      startProcess()
       console.log(data);
       messagesToWatchdog(WDCommands.ntripRestart, data)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
