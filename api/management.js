@@ -7,7 +7,7 @@ const resetConfig = require('../helpers/reset');
 const netAccess = require('../helpers/netAccess');
 const { messagesToWatchdog } = require('../helpers/watchdogInterface');
 const { WDCommands } = require('../helpers/messages');
-const { startProcess } = require('../helpers/NTRIPConfig');
+const { startProcess, stopProcess, restartProcess } = require('../helpers/NTRIPConfig');
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const logger = new Logger().getInstance();
