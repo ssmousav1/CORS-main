@@ -62,8 +62,8 @@ DownloadRawDataRoutes.get('/:filename/:accesstoken', (req, res) => {
       return res.status(401).json({ message: 'لطفا وارد شوید' });
     } else {
       logger.log(`${req.originalUrl} ${req.connection.remoteAddress}   ${req.method}   ${user.username}    ${user.userid} `)
-      req.user = user;
-      if (!!req.user.admin || !!req.user.file_download) {
+
+      if (!!user.admin || !!user.file_download) {
         try {
           res.download(`./${filename}.bin`, error => {
             if (error) {
