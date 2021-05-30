@@ -116,6 +116,7 @@ const handleWebSocket = (data) => {
       }
       break;
     case 'GST':
+//	console.log(new Date(data.time).getTime(),'<<')
       // console.log(data);
       GPSdata.time = data.time
       GPSdata.totalRms = data.totalRms

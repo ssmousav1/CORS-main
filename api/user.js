@@ -3,7 +3,7 @@ const routes = require('express').Router();
 const saltHashPassword = require('../helpers/saltGenerator');
 const { validationResult } = require('express-validator');
 
-// TODO in production delete password from both for security 
+
 routes.get('/', (req, res) => {
   if (req.body.username) {
     userDB.all(`SELECT username, admin, network_config, file_download, file_edit, ntrip_config,file_delete, id  FROM users WHERE username = '${req.body.username}'`, (err, data) => {

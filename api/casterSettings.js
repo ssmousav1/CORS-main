@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 // const { killNTRIP, startNTRIP } = require('../helpers/NTRIP');
 const { messagesToWatchdog } = require('../helpers/watchdogInterface');
 const { WDCommands } = require('../helpers/messages');
+const { restartProcess } = require('../helpers/NTRIPConfig');
 
 casterRoutes.get('/', (req, res) => {
   userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
@@ -24,7 +25,7 @@ casterRoutes.put('/', (req, res) => {
 
   const errors = validationResult(req);
   const casterNewData = JSON.stringify({
-    host: req.body.hostAddress,
+    host: req.body.host,
     port: req.body.port,
     mountpoint: req.body.mountpoint,
     user: req.body.user,
@@ -47,7 +48,16 @@ casterRoutes.put('/', (req, res) => {
           });
         } else {
           messagesToWatchdog(WDCommands.ntripNew, {
-            host: req.body.hostAddress,
+            host: req.body.host,
+            port: req.body.port,
+            mountpoint: req.body.mountpoint,
+            user: req.body.user,
+            pass: req.body.pass
+          })
+          // TODO comment this function to disable using WD helpers 
+          // ps : test it !!
+          restartProcess({
+            host: req.body.host,
             port: req.body.port,
             mountpoint: req.body.mountpoint,
             user: req.body.user,
@@ -55,7 +65,7 @@ casterRoutes.put('/', (req, res) => {
           })
           res.status(200).json({
             message: 'اطلاعات با موفقیت به روزرسانی شد', payload: {
-              host: req.body.hostAddress,
+              host: req.body.host,
               port: req.body.port,
               mountpoint: req.body.mountpoint,
               user: req.body.user,

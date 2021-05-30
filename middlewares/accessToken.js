@@ -7,7 +7,7 @@ const Logger = require('../middlewares/logger');
 const logger = new Logger().getInstance();
 
 const accessToken = async (req, res, next) => {
-
+	console.log('req >>>>>>>>>>>>>>>>>>')
 	if (req.headers.authorization) {
 		jwt.verify(req.headers.authorization, process.env.ACCESS_TOKEN_SECRET || 'accessTokenSecret', (err, user) => {
 			if (err) {
