@@ -24,7 +24,7 @@ const storageCapacity = () => {
       used: raw[2],
       percent: raw[4],
     }))
-    GPSdata.deviceStatus = storageCapacity()
+    GPSdata.deviceStatus.storage = storageCapacity()
     return unitConversion({
       total: raw[1],
       used: raw[2],
