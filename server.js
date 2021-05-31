@@ -47,6 +47,7 @@ const managementRouter = require("./api/management");
 const { socketMessages } = require("./helpers/socketMessages");
 const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
 const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
+const { storageCapacity } = require("./helpers/storageCapacity");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const NMEAparser = NMEAPort.pipe(new Readline({ delimiter: "\r\n" }));
@@ -185,6 +186,8 @@ setInterval(() => {
       }
     }
   );
+
+  storageCapacity()
 }, 60000);
 
 //  server connection
