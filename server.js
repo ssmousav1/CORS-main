@@ -47,6 +47,7 @@ const managementRouter = require("./api/management");
 const { socketMessages } = require("./helpers/socketMessages");
 const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
 const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
+const { storageCapacity } = require("./helpers/storageCapacity");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const NMEAparser = NMEAPort.pipe(new Readline({ delimiter: "\r\n" }));
@@ -103,7 +104,6 @@ NMEAparser.on("data", (data) => {
   try {
     const packet = nmea.parseNmeaSentence(data);
     eventEmitter.emit("WSData");
-//	console.log(packet)
     handleWebSocket(packet);
   } catch (e) { }
 });
@@ -115,60 +115,80 @@ rawDataPort.on("data", (data) => {
 });
 
 
+// setInterval(() => {
+//   if (Date.now() - rawdataTime < 30000) {
+//     messagesToWatchdog(smokeTest.rawOk);
+//   } else {
+//     if (GPSdata.configs.raw > 2) {
+//       messagesToWatchdog(smokeTest.rawFail);
+//     } else {
+//       configRAW(rawDataPort);
+//       const rawInterval = setTimeout(() => {
+//         messagesToWatchdog(smokeTest.oemRestart);
+//         clearTimeout(rawInterval);
+//       }, 2000);
+//     }
+//   }
+
+//   // CHECK NMEA for OEM health
+//   if (Date.now() - nmeaTime < 30000) {
+//     statusMessagesToWatchdog(LEDCommands.oemOK);
+//   } else {
+//     if (GPSdata.configs.NMEA > 2) {
+//       statusMessagesToWatchdog(LEDCommands.oemNone);
+//     } else {
+//       configNMEA(NMEAPort);
+//       const nmeaTimeout = setTimeout(() => {
+//         messagesToWatchdog(smokeTest.oemRestart, LEDCommands.oemNone);
+//         clearTimeout(nmeaTimeout);
+//       }, 2000);
+//     }
+//   }
+
+//   // CHECK NMEA for ANT health
+//   if (
+//     GPSdata.inViewSatellites.all &&
+//     GPSdata.inViewSatellites.all.length === 0
+//   ) {
+//     if (GPSdata.configs.NMEA > 2) {
+//       statusMessagesToWatchdog(LEDCommands.antNone);
+//     } else {
+//       configRTCM(NMEAPort);
+//       const antTimeout = setTimeout(() => {
+//         messagesToWatchdog(smokeTest.oemRestart, LEDCommands.antNone);
+//         clearTimeout(antTimeout);
+//       }, 2000);
+//     }
+//   } else if (GPSdata.inViewSatellites.all) {
+//     statusMessagesToWatchdog(LEDCommands.antOK);
+//   }
+// }, 30000);
+
+// setInterval(() => {
+//   gatewayAccess()
+//     .then((res) => console.log("gateway result >>>> ", res))
+//     .catch((err) => console.error("gateway error > ", err));
+// }, 900000);
+
 setInterval(() => {
-  if (Date.now() - rawdataTime < 30000) {
-    messagesToWatchdog(smokeTest.rawOk);
-  } else {
-    if (GPSdata.configs.raw > 2) {
-      messagesToWatchdog(smokeTest.rawFail);
-    } else {
-      configRAW(rawDataPort);
-      const rawInterval = setTimeout(() => {
-        messagesToWatchdog(smokeTest.oemRestart);
-        clearTimeout(rawInterval);
-      }, 2000);
+  cmd.run(
+    'pm2 status',
+    function (err, data, stderr) {
+      console.log('pm2 status >>>>', data.indexOf('online', data.indexOf('startntripserver')))
+      console.log('sudo ./netconfig.sh', err)
+      console.log('sudo ./netconfig.sh', stderr)
+      if (err || stderr) {
+        GPSdata.ntripservice.status = false
+      } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0) {
+        GPSdata.ntripservice.status = true
+      } else {
+        GPSdata.ntripservice.status = false
+      }
     }
-  }
+  );
 
-  // CHECK NMEA for OEM health
-  if (Date.now() - nmeaTime < 30000) {
-    statusMessagesToWatchdog(LEDCommands.oemOK);
-  } else {
-    if (GPSdata.configs.NMEA > 2) {
-      statusMessagesToWatchdog(LEDCommands.oemNone);
-    } else {
-      configNMEA(NMEAPort);
-      const nmeaTimeout = setTimeout(() => {
-        messagesToWatchdog(smokeTest.oemRestart, LEDCommands.oemNone);
-        clearTimeout(nmeaTimeout);
-      }, 2000);
-    }
-  }
-
-  // CHECK NMEA for ANT health
-  if (
-    GPSdata.inViewSatellites.all &&
-    GPSdata.inViewSatellites.all.length === 0
-  ) {
-    if (GPSdata.configs.NMEA > 2) {
-      statusMessagesToWatchdog(LEDCommands.antNone);
-    } else {
-      configRTCM(NMEAPort);
-      const antTimeout = setTimeout(() => {
-        messagesToWatchdog(smokeTest.oemRestart, LEDCommands.antNone);
-        clearTimeout(antTimeout);
-      }, 2000);
-    }
-  } else if (GPSdata.inViewSatellites.all) {
-    statusMessagesToWatchdog(LEDCommands.antOK);
-  }
-}, 30000);
-
-setInterval(() => {
-  gatewayAccess()
-    .then((res) => console.log("gateway result >>>> ", res))
-    .catch((err) => console.error("gateway error > ", err));
-}, 900000);
+  storageCapacity()
+}, 60000);
 
 //  server connection
 let messageInterval = null;

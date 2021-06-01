@@ -66,7 +66,10 @@ let GPSdata = {
     raw: 0,
     RTCM: 0
   },
-  rawFile: null
+  rawFile: null,
+  ntripservice: {
+    status: false
+  }
 }
 
 
@@ -116,7 +119,7 @@ const handleWebSocket = (data) => {
       }
       break;
     case 'GST':
-//	console.log(new Date(data.time).getTime(),'<<')
+      //	console.log(new Date(data.time).getTime(),'<<')
       // console.log(data);
       GPSdata.time = data.time
       GPSdata.totalRms = data.totalRms
