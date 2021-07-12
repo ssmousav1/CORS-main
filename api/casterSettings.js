@@ -2,8 +2,8 @@ const { userDB } = require('../DB');
 const casterRoutes = require('express').Router();
 const { validationResult } = require('express-validator');
 // const { killNTRIP, startNTRIP } = require('../helpers/NTRIP');
-const { messagesToWatchdog } = require('../helpers/watchdogInterface');
-const { WDCommands } = require('../helpers/messages');
+// const { messagesToWatchdog } = require('../helpers/watchdogInterface');
+// const { WDCommands } = require('../helpers/messages');
 const { restartProcess } = require('../helpers/NTRIPConfig');
 
 casterRoutes.get('/', (req, res) => {
@@ -47,13 +47,13 @@ casterRoutes.put('/', (req, res) => {
             status: 500
           });
         } else {
-          messagesToWatchdog(WDCommands.ntripNew, {
-            host: req.body.host,
-            port: req.body.port,
-            mountpoint: req.body.mountpoint,
-            user: req.body.user,
-            pass: req.body.pass
-          })
+          // messagesToWatchdog(WDCommands.ntripNew, {
+          //   host: req.body.host,
+          //   port: req.body.port,
+          //   mountpoint: req.body.mountpoint,
+          //   user: req.body.user,
+          //   pass: req.body.pass
+          // })
           // TODO comment this function to disable using WD helpers 
           // ps : test it !!
           restartProcess({
@@ -74,7 +74,7 @@ casterRoutes.put('/', (req, res) => {
             action: "به روزرسانی NTRIP",
             status: 200
           });
-          messagesToWatchdog(WDCommands.ntripStatus)
+          // messagesToWatchdog(WDCommands.ntripStatus)
         }
       });
     }

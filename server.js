@@ -12,10 +12,10 @@ const { saveRawData } = require("./helpers/rawData");
 const { NMEAPort, rawDataPort } = require("./helpers/globalPorts");
 const gatewayAccess = require("./helpers/gatewayAccess");
 const startUp = require("./helpers/startUp");
-const {
-  messagesToWatchdog,
-  statusMessagesToWatchdog,
-} = require("./helpers/watchdogInterface");
+// const {
+//   messagesToWatchdog,
+//   statusMessagesToWatchdog,
+// } = require("./helpers/watchdogInterface");
 // middlewares
 const Auth = require("./middlewares/authentication");
 const accessToken = require("./middlewares/accessToken");
@@ -44,9 +44,9 @@ const {
   DownloadRawDataRoutes,
 } = require("./api/rawData");
 const managementRouter = require("./api/management");
-const { socketMessages } = require("./helpers/socketMessages");
-const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
-const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
+// const { socketMessages } = require("./helpers/socketMessages");
+// const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
+// const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
 const { storageCapacity } = require("./helpers/storageCapacity");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
@@ -210,9 +210,9 @@ server.on("connection", (socket, req) => {
     }
   );
 
-  socket.on("message", (message) => {
-    socketMessages(message);
-  });
+  // socket.on("message", (message) => {
+  //   socketMessages(message);
+  // });
 
   socket.on("close", () => {
     clearInterval(messageInterval);

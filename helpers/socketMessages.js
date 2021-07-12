@@ -1,4 +1,4 @@
-const { messagesToWatchdog } = require("./watchdogInterface");
+// const { messagesToWatchdog } = require("./watchdogInterface");
 
 
 const allowedMessages = {
@@ -12,7 +12,7 @@ const socketMessages = (message) => {
   console.log(message);
 
   if (Object.keys(allowedMessages).includes(message)) {
-    messagesToWatchdog(allowedMessages[message])
+    // messagesToWatchdog(allowedMessages[message])
   }
 }
 

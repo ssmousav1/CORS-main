@@ -1,14 +1,14 @@
-const { smokeTest } = require("../helpers/messages");
-const { messagesToWatchdog } = require("../helpers/watchdogInterface");
+// const { smokeTest } = require("../helpers/messages");
+// const { messagesToWatchdog } = require("../helpers/watchdogInterface");
 const sqlite3 = require("sqlite3").verbose();
 
 let userDB = new sqlite3.Database('./user.db', (err) => {
   if (err) {
     console.error(err.message);
-    messagesToWatchdog(smokeTest.userDBFail)
+    // messagesToWatchdog(smokeTest.userDBFail)
   } else {
     console.log('Connected to the database.');
-    messagesToWatchdog(smokeTest.userDBOk)
+    // messagesToWatchdog(smokeTest.userDBOk)
     createUserTable()
     createSettingsTable()
     // createRawDataFiles()
@@ -18,9 +18,9 @@ let userDB = new sqlite3.Database('./user.db', (err) => {
 let rawFiles = new sqlite3.Database('./raw.db', (err) => {
   if (err) {
     console.error(err.message);
-    messagesToWatchdog(smokeTest.rawDBFail)
+    // messagesToWatchdog(smokeTest.rawDBFail)
   } else {
-    messagesToWatchdog(smokeTest.rawDBOk)
+    // messagesToWatchdog(smokeTest.rawDBOk)
     console.log('raw DB created');
     createRawDataFiles()
   }
