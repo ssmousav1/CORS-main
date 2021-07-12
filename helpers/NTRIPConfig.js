@@ -63,7 +63,7 @@ const startProcess = (params = null) => {
             }
           );
         } else {
-          return 0
+          console.error('there are no data in DB : ****');
         }
       }
     });
