@@ -179,7 +179,7 @@ setInterval(() => {
       console.log('sudo ./netconfig.sh', stderr)
       if (err || stderr) {
         GPSdata.ntripservice.status = false
-      } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0) {
+      } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
         GPSdata.ntripservice.status = true
       } else {
         GPSdata.ntripservice.status = false
