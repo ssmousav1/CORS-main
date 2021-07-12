@@ -43,6 +43,12 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', data)
         console.log('examples dir now contains the example file along with : ', err)
         console.log('examples dir now contains the example file along with : ', stderr)
+
+        if (!!err && !!stderr) {
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+        } else {
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => { })
+        }
       }
     );
   } else {
@@ -60,6 +66,12 @@ const startProcess = (params = null) => {
               console.log('examples dir now contains the example file along with : ', data)
               console.log('examples dir now contains the example file along with : ', err)
               console.log('examples dir now contains the example file along with : ', stderr)
+
+              if (!!err && !!stderr) {
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+              } else {
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => { })
+              }
             }
           );
         } else {
