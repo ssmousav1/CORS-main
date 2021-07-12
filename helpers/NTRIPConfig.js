@@ -36,7 +36,7 @@ const killallProcess = () => {
 const startProcess = (params = null) => {
 
   if (params) {
-
+    console.log(params);
     cmd.run(
       `SPORT=/dev/ttyO4 BRATE=115200 OUTPUT=2 CASTER=${params.host} CPORT=${params.port} MOUNTPOINT=${params.mountpoint} CPASS=${params.pass} pm2 start startntripserver.sh`,
       function (err, data, stderr) {
@@ -46,12 +46,14 @@ const startProcess = (params = null) => {
       }
     );
   } else {
+    console.log('start ntrip form DB');
     userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
       if (err) {
         console.error('there is an error from loading data from database : ****', err);
       } else {
         if (data[0]) {
           console.log('starting ntrip');
+          console.log(`SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh `);
           cmd.run(
             `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh `,
             function (err, data, stderr) {
