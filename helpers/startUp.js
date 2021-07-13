@@ -78,7 +78,7 @@ const startUp = () => {
 
     } else if (data && data[0]) {
       console.log(JSON.parse(data[0].value));
-      console.log(data[0]);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>',data[0]);
 
       GPSdata.ntripservice.status = JSON.parse(data[0].value)
     }
