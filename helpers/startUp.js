@@ -73,15 +73,15 @@ const startUp = () => {
 
 
   // Load NTRIP server last status
-  userDB.run(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
+  userDB.all(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
     if (err) {
 
     } else if (data && data[0]) {
-      console.log(JSON.parse(data[0].value));
+      console.log(data[0].value);
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data[0]);
 
-      GPSdata.ntripservice.status = JSON.parse(data[0].value)
+      GPSdata.ntripservice.status = data[0].value
     }
   })
 
