@@ -1,4 +1,5 @@
 const cmd = require("node-cmd");
+const { GPSdata } = require("../api/WS");
 // const fs = require("fs");
 const { userDB } = require("../DB");
 
@@ -47,10 +48,20 @@ const startProcess = (params = null) => {
         if (!!err && !!stderr) {
           userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err, data) => {
             console.error('error in saving data in DB', err, '**', data);
+            if (err) {
+  
+            } else {
+              GPSdata.ntripservice.status = 'error'
+            }
           })
         } else {
           userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
             console.error('error in saving data in DB', err, '**', data);
+            if (err) {
+  
+            } else {
+              GPSdata.ntripservice.status = 'running'
+            }
           })
         }
       }
@@ -74,10 +85,20 @@ const startProcess = (params = null) => {
               if (!!err && !!stderr) {
                 userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err, data) => {
                   console.error('error in saving data in DB', err, '**', data);
+                  if (err) {
+        
+                  } else {
+                    GPSdata.ntripservice.status = 'error'
+                  }
                 })
               } else {
                 userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
                   console.error('error in saving data in DB', err, '**', data);
+                  if (err) {
+        
+                  } else {
+                    GPSdata.ntripservice.status = 'running'
+                  }
                 })
               }
             }
@@ -131,10 +152,20 @@ const stopProcess = () => {
       if (!!err && !!stderr) {
         userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err, data) => {
           console.error('error in saving data in DB', err, '**', data);
+          if (err) {
+
+          } else {
+            GPSdata.ntripservice.status = 'error'
+          }
         })
       } else {
         userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'stoped')`, (err, data) => {
           console.error('error in saving data in DB', err, '**', data);
+          if (err) {
+
+          } else {
+            GPSdata.ntripservice.status = 'stoped'
+          }
         })
       }
 
@@ -195,10 +226,20 @@ const restartProcess = (params) => {
             if (!!err && !!stderr) {
               userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err, data) => {
                 console.error('error in saving data in DB', err, '**', data);
+                if (err) {
+
+                } else {
+                  GPSdata.ntripservice.status = 'error'
+                }
               })
             } else {
               userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
                 console.error('error in saving data in DB', err, '**', data);
+                if (err) {
+
+                } else {
+                  GPSdata.ntripservice.status = 'running'
+                }
               })
             }
           }
