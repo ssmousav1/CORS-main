@@ -1,5 +1,5 @@
 const cmd = require("node-cmd");
-const fs = require("fs");
+// const fs = require("fs");
 const { userDB } = require("../DB");
 
 // const EventLib = require("../util/Eventlib");
@@ -117,6 +117,15 @@ const stopProcess = () => {
     `pm2 stop startntripserver.sh`,
     function (err, data, stderr) {
       console.log('examples dir now contains the example file along with : ', data)
+      console.log('examples dir now contains the example file along with : ', err)
+      console.log('examples dir now contains the example file along with : ', stderr)
+
+      if (!!err && !!stderr) {
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+      } else {
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'stoped')`, (err) => { })
+      }
+
     }
   );
 }
@@ -170,6 +179,12 @@ const restartProcess = (params) => {
             console.log('examples dir now contains the example file along with : ', data)
             console.log('examples dir now contains the example file along with : ', err)
             console.log('examples dir now contains the example file along with : ', stderr)
+
+            if (!!err && !!stderr) {
+              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+            } else {
+              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => { })
+            }
           }
         );
       }
