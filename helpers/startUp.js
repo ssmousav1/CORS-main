@@ -12,6 +12,7 @@ const { checkNTRIP } = require("./checkNTRIP");
 // const { configStop, configNMEA, configSave, configBaudRate } = require("./configPorts");
 const { configRAW, configNMEA, configRTCM } = require("./configPorts");
 const { userDB } = require("../DB");
+const { GPSdata } = require('../api/WS');
 // const { startProcess, envGen } = require('./NTRIPConfig');
 
 const logger = new Logger().getInstance();
@@ -69,6 +70,19 @@ const startUp = () => {
       console.log('sudo ./netconfig.sh', stderr)
     }
   );
+
+
+  // Load NTRIP server last status
+  userDB.run(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
+    if (err) {
+
+    } else if (data[0]) {
+      console.log(JSON.parse(data[0].value));
+      console.log(data[0]);
+
+      GPSdata.ntripservice.status = JSON.parse(data[0].value)
+    }
+  })
 
   // send data to watchdog at startup
   // statusMessagesToWatchdog(LEDCommands.antConf);
