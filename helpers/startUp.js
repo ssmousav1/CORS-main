@@ -76,7 +76,7 @@ const startUp = () => {
   userDB.run(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
     if (err) {
 
-    } else if (data[0]) {
+    } else if (data && data[0]) {
       console.log(JSON.parse(data[0].value));
       console.log(data[0]);
 
