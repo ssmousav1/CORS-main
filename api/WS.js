@@ -68,7 +68,7 @@ let GPSdata = {
   },
   rawFile: null,
   ntripservice: {
-    status: false
+    status: null
   }
 }
 

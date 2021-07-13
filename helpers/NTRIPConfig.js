@@ -45,9 +45,13 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', stderr)
 
         if (!!err && !!stderr) {
-          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => {
+            console.error('error in saving data in DB');
+          })
         } else {
-          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => { })
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => {
+            console.error('error in saving data in DB');
+          })
         }
       }
     );
@@ -68,9 +72,13 @@ const startProcess = (params = null) => {
               console.log('examples dir now contains the example file along with : ', stderr)
 
               if (!!err && !!stderr) {
-                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => {
+                  console.error('error in saving data in DB');
+                })
               } else {
-                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => { })
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => {
+                  console.error('error in saving data in DB');
+                })
               }
             }
           );
@@ -121,9 +129,13 @@ const stopProcess = () => {
       console.log('examples dir now contains the example file along with : ', stderr)
 
       if (!!err && !!stderr) {
-        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => {
+          console.error('error in saving data in DB');
+        })
       } else {
-        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'stoped')`, (err) => { })
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'stoped')`, (err) => {
+          console.error('error in saving data in DB');
+        })
       }
 
     }
@@ -181,9 +193,13 @@ const restartProcess = (params) => {
             console.log('examples dir now contains the example file along with : ', stderr)
 
             if (!!err && !!stderr) {
-              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => { })
+              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'error')`, (err) => {
+                console.error('error in saving data in DB');
+              })
             } else {
-              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => { })
+              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err) => {
+                console.error('error in saving data in DB');
+              })
             }
           }
         );
