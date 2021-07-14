@@ -175,15 +175,15 @@ setInterval(() => {
     'pm2 status',
     function (err, data, stderr) {
       console.log('pm2 status >>>>', data.indexOf('online', data.indexOf('startntripserver')))
-      if (err || stderr) {
+      if (!!err || !!stderr) {
         // GPSdata.ntripservice.status = ''
       } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
         console.log(data.indexOf('online', data.indexOf('startntripserver')), data.indexOf('startntripserver'), '****');
         GPSdata.ntripservice.status = 'running'
-      } else if (data.indexOf('stopped', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
-        GPSdata.ntripservice.status = 'stopped'
       } else if (data.indexOf('errored', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
         GPSdata.ntripservice.status = 'error'
+      } else if (data.indexOf('stopped', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
+        GPSdata.ntripservice.status = 'stopped'
       }
     }
   );
