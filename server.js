@@ -182,7 +182,7 @@ setInterval(() => {
         GPSdata.ntripservice.status = 'running'
       } else if (data.indexOf('errored', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
         GPSdata.ntripservice.status = 'error'
-      } else if (data.indexOf('stopped', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
+      } else {
         GPSdata.ntripservice.status = 'stopped'
       }
     }
