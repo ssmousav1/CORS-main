@@ -143,7 +143,7 @@ const getUptime = () => {
 
 const stopProcess = () => {
   cmd.run(
-    `pm2 stop startntripserver.sh`,
+    `pm2 del startntripserver.sh`,
     function (err, data, stderr) {
       console.log('examples dir now contains the example file along with : ', data)
       console.log('examples dir now contains the example file along with : ', err)
@@ -159,12 +159,12 @@ const stopProcess = () => {
           }
         })
       } else {
-        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'stoped')`, (err, data) => {
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'stopped')`, (err, data) => {
           console.error('error in saving data in DB', err, '**', data);
           if (err) {
 
           } else {
-            GPSdata.ntripservice.status = 'stoped'
+            GPSdata.ntripservice.status = 'stopped'
           }
         })
       }

@@ -171,21 +171,21 @@ rawDataPort.on("data", (data) => {
 // }, 900000);
 
 setInterval(() => {
-  // cmd.run(
-  //   'pm2 status',
-  //   function (err, data, stderr) {
-  //     console.log('pm2 status >>>>', data.indexOf('online', data.indexOf('startntripserver')))
-  //     console.log('sudo ./netconfig.sh', err)
-  //     console.log('sudo ./netconfig.sh', stderr)
-  //     if (err || stderr) {
-  //       GPSdata.ntripservice.status = false
-  //     } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
-  //       GPSdata.ntripservice.status = true
-  //     } else {
-  //       GPSdata.ntripservice.status = false
-  //     }
-  //   }
-  // );
+  cmd.run(
+    'pm2 status',
+    function (err, data, stderr) {
+      console.log('pm2 status >>>>', data.indexOf('online', data.indexOf('startntripserver')))
+      if (err || stderr) {
+        // GPSdata.ntripservice.status = ''
+      } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
+        GPSdata.ntripservice.status = 'running'
+      } else if (data.indexOf('stopped', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0)  {
+        GPSdata.ntripservice.status = 'stopped'
+      } else if (data.indexOf('errored', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0)  {
+        GPSdata.ntripservice.status = 'error'
+      }
+    }
+  );
 
 
   storageCapacity()
