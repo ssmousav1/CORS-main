@@ -1,6 +1,6 @@
 const cmd = require('node-cmd');
-const { statusMessagesToWatchdog } = require("./watchdogInterface");
-const { LEDCommands } = require("./messages");
+// const { statusMessagesToWatchdog } = require("./watchdogInterface");
+// const { LEDCommands } = require("./messages");
 
 const netAccess = () => {
   return new Promise(

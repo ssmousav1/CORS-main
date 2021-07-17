@@ -1,8 +1,8 @@
 const { userDB } = require('../DB');
 const networkRoutes = require('express').Router();
 const { validationResult } = require('express-validator');
-const { messagesToWatchdog } = require("../helpers/watchdogInterface");
-const { WDCommands } = require('../helpers/messages');
+// const { messagesToWatchdog } = require("../helpers/watchdogInterface");
+// const { WDCommands } = require('../helpers/messages');
 const { setIP, setNetwork } = require('../helpers/netConfig');
 
 networkRoutes.get('/', (req, res) => {
@@ -56,12 +56,12 @@ networkRoutes.put('/', (req, res) => {
             status: 200
           });
 
-          messagesToWatchdog(WDCommands.netConfig, {
-            ip: req.body.ip,
-            subnet: req.body.subnet,
-            gateway: req.body.gateway,
-            nameserver: req.body.nameserver
-          })
+          // messagesToWatchdog(WDCommands.netConfig, {
+          //   ip: req.body.ip,
+          //   subnet: req.body.subnet,
+          //   gateway: req.body.gateway,
+          //   nameserver: req.body.nameserver
+          // })
           // TODO comment this to disable using WD helper functions 
           // setIP({
           //   ip: req.body.ip,

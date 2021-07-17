@@ -5,8 +5,8 @@ const { userDB } = require('../DB');
 const Logger = require('../middlewares/logger');
 const resetConfig = require('../helpers/reset');
 const netAccess = require('../helpers/netAccess');
-const { messagesToWatchdog } = require('../helpers/watchdogInterface');
-const { WDCommands } = require('../helpers/messages');
+// const { messagesToWatchdog } = require('../helpers/watchdogInterface');
+// const { WDCommands } = require('../helpers/messages');
 const { startProcess, stopProcess, restartProcess } = require('../helpers/NTRIPConfig');
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
@@ -93,7 +93,7 @@ const handleManageCommands = (command, res, data) => {
           res.status(500).json({ message: 'خطا سرور در ذخیره ' });
         } else {
           res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
-          messagesToWatchdog(WDCommands.sshOn)
+          // messagesToWatchdog(WDCommands.sshOn)
         }
       })
       break;
@@ -104,27 +104,27 @@ const handleManageCommands = (command, res, data) => {
           res.status(500).json({ message: 'خطا در ذخیره تغییرات' });
         } else {
           res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
-          messagesToWatchdog(WDCommands.sshOff)
+          // messagesToWatchdog(WDCommands.sshOff)
         }
       })
       break;
     case 'startNTRIP':
       // TODO test this !!
       // TODO IMPORTANT : remember to get data from DB **************
-      startProcess()
-      messagesToWatchdog(WDCommands.ntripStart)
+      startProcess(data)
+      // messagesToWatchdog(WDCommands.ntripStart)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
     case 'stopNTRIP':
       // TODO test this !!
       stopProcess()
-      messagesToWatchdog(WDCommands.ntripStop)
+      // messagesToWatchdog(WDCommands.ntripStop)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
     case 'restartNTRIP':
       // TODO test this !!
       restartProcess()
-      messagesToWatchdog(WDCommands.ntripRestart)
+      // messagesToWatchdog(WDCommands.ntripRestart)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
     case 'newNTRIP':
@@ -132,12 +132,12 @@ const handleManageCommands = (command, res, data) => {
       // createNTRIP(data)
       startProcess()
       console.log(data);
-      messagesToWatchdog(WDCommands.ntripRestart, data)
+      // messagesToWatchdog(WDCommands.ntripRestart, data)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
     case 'reboot':
       // send restart msg to watchdog
-      messagesToWatchdog(WDCommands.sysReboot)
+      // messagesToWatchdog(WDCommands.sysReboot)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
     case 'reset':

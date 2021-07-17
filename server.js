@@ -12,10 +12,10 @@ const { saveRawData } = require("./helpers/rawData");
 const { NMEAPort, rawDataPort } = require("./helpers/globalPorts");
 const gatewayAccess = require("./helpers/gatewayAccess");
 const startUp = require("./helpers/startUp");
-const {
-  messagesToWatchdog,
-  statusMessagesToWatchdog,
-} = require("./helpers/watchdogInterface");
+// const {
+//   messagesToWatchdog,
+//   statusMessagesToWatchdog,
+// } = require("./helpers/watchdogInterface");
 // middlewares
 const Auth = require("./middlewares/authentication");
 const accessToken = require("./middlewares/accessToken");
@@ -44,9 +44,9 @@ const {
   DownloadRawDataRoutes,
 } = require("./api/rawData");
 const managementRouter = require("./api/management");
-const { socketMessages } = require("./helpers/socketMessages");
-const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
-const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
+// const { socketMessages } = require("./helpers/socketMessages");
+// const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
+// const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
 const { storageCapacity } = require("./helpers/storageCapacity");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
@@ -175,17 +175,19 @@ setInterval(() => {
     'pm2 status',
     function (err, data, stderr) {
       console.log('pm2 status >>>>', data.indexOf('online', data.indexOf('startntripserver')))
-      console.log('sudo ./netconfig.sh', err)
-      console.log('sudo ./netconfig.sh', stderr)
-      if (err || stderr) {
-        GPSdata.ntripservice.status = false
+      if (!!err || !!stderr) {
+        // GPSdata.ntripservice.status = ''
       } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
-        GPSdata.ntripservice.status = true
+        console.log(data.indexOf('online', data.indexOf('startntripserver')), data.indexOf('startntripserver'), '****');
+        GPSdata.ntripservice.status = 'running'
+      } else if (data.indexOf('errored', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
+        GPSdata.ntripservice.status = 'error'
       } else {
-        GPSdata.ntripservice.status = false
+        GPSdata.ntripservice.status = 'stopped'
       }
     }
   );
+
 
   storageCapacity()
 }, 60000);
@@ -210,9 +212,9 @@ server.on("connection", (socket, req) => {
     }
   );
 
-  socket.on("message", (message) => {
-    socketMessages(message);
-  });
+  // socket.on("message", (message) => {
+  //   socketMessages(message);
+  // });
 
   socket.on("close", () => {
     clearInterval(messageInterval);
