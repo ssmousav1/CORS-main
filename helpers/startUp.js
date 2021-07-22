@@ -81,7 +81,11 @@ const startUp = () => {
       console.log(data[0].value);
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data[0]);
 
-      GPSdata.ntripservice.status = data[0].value
+      GPSdata.ntripservice.status = JSON.parse(data[0].value).status
+      GPSdata.ntripservice.host = JSON.parse(data[0].value).host
+      GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
+      GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
+      GPSdata.ntripservice.port = JSON.parse(data[0].value).port
     }
   })
 
