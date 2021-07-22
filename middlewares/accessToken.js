@@ -11,15 +11,12 @@ const accessToken = async (req, res, next) => {
 	if (req.headers.authorization) {
 		jwt.verify(req.headers.authorization, process.env.ACCESS_TOKEN_SECRET || 'accessTokenSecret', (err, user) => {
 			if (err) {
-
 				try {
 					userDB.all(`SELECT username, admin, network_config, file_download, file_delete, file_edit, ntrip_config, password, id  FROM users WHERE username = '${req.body.username}'`, async (err, data) => {
 						if (err) {
 							console.error('there is an error from loading data from database : ****', err);
 							res.status(500).json({ message: 'error in getting data from DB' });
 						} else {
-
-
 							if (data[0]) {
 								req.auth = (data[0].password === saltHashPassword(req.body.password, req.body.username).passwordHash)
 
@@ -50,12 +47,12 @@ const accessToken = async (req, res, next) => {
 
 								next()
 							} else {
-								res.status(400).json({ message: 'there is no such user' });
+								res.status(400).json({ message: 'کاربری با این نام وجود ندارد' });
 							}
 						}
 					});
 				} catch (error) {
-					res.status(400).json({ message: 'there is no such user' });
+					res.status(400).json({ message: 'خطایی رخ داده دوباره امتحان کنید' });
 				}
 			} else {
 				logger.log(`${req.originalUrl} ${req.connection.remoteAddress}  ${req.method}   ${user.username}    ${user.userid} `)
@@ -63,7 +60,7 @@ const accessToken = async (req, res, next) => {
 			}
 		});
 	} else {
-		res.status(500).json({ message: 'error in getting data from DB sick' });
+		res.status(500).json({ message: 'خطایی رخ داده دوباره امتحان کنید' });
 	}
 }
 
