@@ -51,6 +51,10 @@ const startProcess = (params = null) => {
             console.error('error in saving data in DB', err, '**', data);
           } else {
             GPSdata.ntripservice.status = 'loading'
+            GPSdata.ntripservice.host = params.host
+            GPSdata.ntripservice.mount = params.mountpoint
+            GPSdata.ntripservice.pass = params.pass
+            GPSdata.ntripservice.port = params.port
           }
         })
         // } else {
@@ -87,6 +91,10 @@ const startProcess = (params = null) => {
                   console.error('error in saving data in DB', err, '**', data);
                 } else {
                   GPSdata.ntripservice.status = 'loading'
+                  GPSdata.ntripservice.host = JSON.parse(data[0].value).host
+                  GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
+                  GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
+                  GPSdata.ntripservice.port = JSON.parse(data[0].value).port
                 }
               })
               // } else {
