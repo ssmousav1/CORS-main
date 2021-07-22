@@ -45,19 +45,19 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', err)
         console.log('examples dir now contains the example file along with : ', stderr)
 
-        // if (!!err && !!stderr) {
-        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-          if (err) {
-            console.error('error in saving data in DB', err, '**', data);
-          } else {
-            GPSdata.ntripservice.status = 'loading'
-            GPSdata.ntripservice.host = params.host
-            GPSdata.ntripservice.mount = params.mountpoint
-            GPSdata.ntripservice.pass = params.pass
-            GPSdata.ntripservice.port = params.port
-          }
-        })
-        // } else {
+        if (!!err && !!stderr) {
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
+            if (err) {
+              console.error('error in saving data in DB', err, '**', data);
+            } else {
+              GPSdata.ntripservice.status = 'loading'
+              GPSdata.ntripservice.host = params.host
+              GPSdata.ntripservice.mount = params.mountpoint
+              GPSdata.ntripservice.pass = params.pass
+              GPSdata.ntripservice.port = params.port
+            }
+          })
+        }
         //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
         //     console.error('error in saving data in DB', err, '**', data);
         //     if (err) {
@@ -66,7 +66,6 @@ const startProcess = (params = null) => {
         //       GPSdata.ntripservice.status = 'running'
         //     }
         //   })
-        // }
       }
     );
   } else {
@@ -85,19 +84,19 @@ const startProcess = (params = null) => {
               console.log('examples dir now contains the example file along with : ', err)
               console.log('examples dir now contains the example file along with : ', stderr)
 
-              // if (!!err && !!stderr) {
-              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-                if (err) {
-                  console.error('error in saving data in DB', err, '**', data);
-                } else {
-                  GPSdata.ntripservice.status = 'loading'
-                  GPSdata.ntripservice.host = JSON.parse(data[0].value).host
-                  GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
-                  GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
-                  GPSdata.ntripservice.port = JSON.parse(data[0].value).port
-                }
-              })
-              // } else {
+              if (!!err && !!stderr) {
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
+                  if (err) {
+                    console.error('error in saving data in DB', err, '**', data);
+                  } else {
+                    GPSdata.ntripservice.status = 'loading'
+                    GPSdata.ntripservice.host = JSON.parse(data[0].value).host
+                    GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
+                    GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
+                    GPSdata.ntripservice.port = JSON.parse(data[0].value).port
+                  }
+                })
+              }
               //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
               //     console.error('error in saving data in DB', err, '**', data);
               //     if (err) {
@@ -106,7 +105,6 @@ const startProcess = (params = null) => {
               //       GPSdata.ntripservice.status = 'running'
               //     }
               //   })
-              // }
             }
           );
         } else {
@@ -155,15 +153,15 @@ const stopProcess = () => {
       console.log('examples dir now contains the example file along with : ', err)
       console.log('examples dir now contains the example file along with : ', stderr)
 
-      // if (!!err && !!stderr) {
-      userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-        if (err) {
-          console.error('error in saving data in DB', err, '**', data);
-        } else {
-          GPSdata.ntripservice.status = 'loading'
-        }
-      })
-      // } else {
+      if (!!err && !!stderr) {
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
+          if (err) {
+            console.error('error in saving data in DB', err, '**', data);
+          } else {
+            GPSdata.ntripservice.status = 'loading'
+          }
+        })
+      }
       //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
       //     console.error('error in saving data in DB', err, '**', data);
       //     if (err) {
@@ -172,8 +170,6 @@ const stopProcess = () => {
       //       GPSdata.ntripservice.status = 'running'
       //     }
       //   })
-      // }
-
     }
   );
 }
