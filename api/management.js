@@ -7,7 +7,7 @@ const resetConfig = require('../helpers/reset');
 const netAccess = require('../helpers/netAccess');
 // const { messagesToWatchdog } = require('../helpers/watchdogInterface');
 // const { WDCommands } = require('../helpers/messages');
-const { startProcess, stopProcess, restartProcess } = require('../helpers/NTRIPConfig');
+const { startProcess, stopProcess/*, restartProcess*/ } = require('../helpers/NTRIPConfig');
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const logger = new Logger().getInstance();
@@ -121,12 +121,12 @@ const handleManageCommands = (command, res, data) => {
       // messagesToWatchdog(WDCommands.ntripStop)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
-    case 'restartNTRIP':
-      // TODO test this !!
-      restartProcess()
-      // messagesToWatchdog(WDCommands.ntripRestart)
-      res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
-      break;
+    // case 'restartNTRIP':
+    //   // TODO test this !!
+    //   restartProcess()
+    //   // messagesToWatchdog(WDCommands.ntripRestart)
+    //   res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
+    //   break;
     case 'newNTRIP':
       // TODO test this !!
       // createNTRIP(data)
