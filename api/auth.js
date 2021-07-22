@@ -2,7 +2,7 @@ const authRouter = require('express').Router();
 
 authRouter.post('/login', (req, res) => {
   if (req.auth) {
-    res.status(200).json({ message: 'authRouter this is login!', payload: { access_token: req.access_token, userInfo: req.user } });
+    res.status(200).json({ message: 'با موفقیت وارد شدید', payload: { access_token: req.access_token, userInfo: req.user } });
   } else {
     res.status(401).json({ message: 'رمز عبور ناصحیح است' });
   }
