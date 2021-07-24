@@ -71,41 +71,41 @@ const startUp = () => {
     }
   );
 
-  const ntripData = JSON.stringify({
-    status: 'loading',
-    host: 'GPSdata.ntripservice.host',
-    mountpoint: 'GPSdata.ntripservice.mountpoint',
-    pass: ' GPSdata.ntripservice.pass',
-    por: 'GPSdata.ntripservice.port'
-  })
-  userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${ntripData}')`, (err, data) => {
-    if (err) {
-      console.error('error in saving data in DB', err, '**', data);
-    } else {
-      GPSdata.ntripservice.status = 'loading'
-    }
-  })
-
-  // Load NTRIP server last status
-  // userDB.all(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
-  //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
+  // const ntripData = JSON.stringify({
+  //   status: 'loading',
+  //   host: 'GPSdata.ntripservice.host',
+  //   mountpoint: 'GPSdata.ntripservice.mountpoint',
+  //   pass: ' GPSdata.ntripservice.pass',
+  //   por: 'GPSdata.ntripservice.port'
+  // })
+  // userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${ntripData}')`, (err, data) => {
   //   if (err) {
-
-  //   } else if (data && data[0]) {
-  //     console.log(data[0].value);
-  //     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data[0]);
-  //     try {
-  //       GPSdata.ntripservice.status = JSON.parse(data[0].value).status
-  //       GPSdata.ntripservice.host = JSON.parse(data[0].value).host
-  //       GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
-  //       GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
-  //       GPSdata.ntripservice.port = JSON.parse(data[0].value).port
-  //     } catch (e) {
-
-  //     }
-
+  //     console.error('error in saving data in DB', err, '**', data);
+  //   } else {
+  //     GPSdata.ntripservice.status = 'loading'
   //   }
   // })
+
+  // Load NTRIP server last status
+  userDB.all(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
+    if (err) {
+
+    } else if (data && data[0]) {
+      console.log(data[0].value);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', data[0]);
+      try {
+        GPSdata.ntripservice.status = JSON.parse(data[0].value).status
+        GPSdata.ntripservice.host = JSON.parse(data[0].value).host
+        GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
+        GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
+        GPSdata.ntripservice.port = JSON.parse(data[0].value).port
+      } catch (e) {
+
+      }
+
+    }
+  })
 
   // send data to watchdog at startup
   // statusMessagesToWatchdog(LEDCommands.antConf);
