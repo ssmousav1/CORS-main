@@ -40,11 +40,11 @@ routes.post('/', (req, res) => {
     ntrip_config } = req.body
 
   if (admin) {
-    return res.status(400).json({ errors: 'شما توانایی ساخت کاربر با دسترسی مدیر سیستم' });
+    return res.status(400).json({ message: ' شما توانایی ساخت کاربر با دسترسی مدیر ندارید' });
   }
 
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ errors: errors.array(), message: 'لطفا تمام فیلد ها را به درستی پر کنید' });
   } else {
     userDB.run('INSERT INTO users (username, password, admin, network_config, file_download, file_edit, file_delete, ntrip_config) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
@@ -124,7 +124,7 @@ routes.put('/', (req, res) => {
         res.status(500).json({ message: 'خطا در استخراج اطلاعات ' });
       } else {
         if (data[0]) {
-          console.log('&&&&&&&&&',req.user.username);
+          console.log('&&&&&&&&&', req.user.username);
           if (data[0].password === saltHashPassword(old_password, req.user.username).passwordHash) {
 
             userDB.run(`UPDATE users SET 
