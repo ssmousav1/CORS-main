@@ -6,38 +6,39 @@ const { userDB } = require("../DB");
 // const EventLib = require("../util/Eventlib");
 // const eventlib = new EventLib().getInstance();
 
-let NTRIPObject
+// let NTRIPObject
 
 // Generate env file for starting NTRIP
-const envGen = (params) => {
-  Object.keys(params).forEach(envName => {
-    cmd.run(
-      `export ${envName}=${params[envName]}`,
-      function (err, data, stderr) {
-        console.log('setting new envs : ', envName, params[envName], data)
-        console.log('setting new envs : ', envName, params[envName], err)
-        console.log('setting new envs : ', envName, params[envName], stderr)
-      }
-    );
-  })
-}
+// const envGen = (params) => {
+//   Object.keys(params).forEach(envName => {
+//     cmd.run(
+//       `export ${envName}=${params[envName]}`,
+//       function (err, data, stderr) {
+//         console.log('setting new envs : ', envName, params[envName], data)
+//         console.log('setting new envs : ', envName, params[envName], err)
+//         console.log('setting new envs : ', envName, params[envName], stderr)
+//       }
+//     );
+//   })
+// }
 
 // Runs before new NTRIP spawn to clear extra containers
-const killallProcess = () => {
-  cmd.run(
-    `pm2 del startntripserver.sh`,
-    (err, data, stderr) => {
-      console.log('examples dir now contains the example file along with : ', data)
-      console.log('examples dir now contains the example file along with : ', err)
-      console.log('examples dir now contains the example file along with : ', stderr)
-    }
-  );
-}
+// const killallProcess = () => {
+//   cmd.run(
+//     `pm2 del startntripserver.sh`,
+//     (err, data, stderr) => {
+//       console.log('examples dir now contains the example file along with : ', data)
+//       console.log('examples dir now contains the example file along with : ', err)
+//       console.log('examples dir now contains the example file along with : ', stderr)
+//     }
+//   );
+// }
 
 const startProcess = (params = null) => {
 
   if (params) {
     console.log(params);
+    console.log('start ntrip from params');
     cmd.run(
       `SPORT=/dev/ttyO4 BRATE=115200 OUTPUT=2 CASTER=${params.host} CPORT=${params.port} MOUNTPOINT=${params.mountpoint} CPASS=${params.pass} pm2 start startntripserver.sh --no-autorestart`,
       function (err, data, stderr) {
@@ -45,24 +46,31 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', err)
         console.log('examples dir now contains the example file along with : ', stderr)
 
-        // if (!!err && !!stderr) {
-        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-          if (err) {
-            console.error('error in saving data in DB', err, '**', data);
-          } else {
-            GPSdata.ntripservice.status = 'loading'
-          }
-        })
-        // } else {
-        //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
-        //     console.error('error in saving data in DB', err, '**', data);
-        //     if (err) {
+        if (!!err && !!stderr) {
+        } else {
+          console.log('no error');
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
+            status: 'loading',
+            host: params.host,
+            mountpoint: params.mountpoint,
+            pass: params.pass,
+            port: params.port,
+            user: params.user
+          })}')`, (err, data) => {
+            if (err) {
+              console.error('error in saving data in DB', err, '**', data);
+            } else {
+              console.log('set ntrip data in storage');
+              GPSdata.ntripservice.status = 'loading'
+              GPSdata.ntripservice.host = params.host
+              GPSdata.ntripservice.mount = params.mountpoint
+              GPSdata.ntripservice.pass = params.pass
+              GPSdata.ntripservice.port = params.port
+              GPSdata.ntripservice.user = params.user
+            }
+          })
 
-        //     } else {
-        //       GPSdata.ntripservice.status = 'running'
-        //     }
-        //   })
-        // }
+        }
       }
     );
   } else {
@@ -72,33 +80,42 @@ const startProcess = (params = null) => {
         console.error('there is an error from loading data from database : ****', err);
       } else {
         if (data[0]) {
-          console.log('starting ntrip');
-          console.log(`SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh  --no-autorestart`);
+
+          const ntripData = JSON.parse(data[0].value)
+
+          console.log('starting ntrip', 'ntripData >>>>>>>', ntripData);
+          console.log(`SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${ntripData.host} CPORT=${ntripData.port} MOUNTPOINT=${ntripData.mountpoint} CPASS=${ntripData.pass} pm2 start startntripserver.sh  --no-autorestart`);
           cmd.run(
-            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh `,
+            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${ntripData.host} CPORT=${ntripData.port} MOUNTPOINT=${ntripData.mountpoint} CPASS=${ntripData.pass} pm2 start startntripserver.sh `,
             function (err, data, stderr) {
               console.log('examples dir now contains the example file along with : ', data)
               console.log('examples dir now contains the example file along with : ', err)
               console.log('examples dir now contains the example file along with : ', stderr)
 
-              // if (!!err && !!stderr) {
-              userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-                if (err) {
-                  console.error('error in saving data in DB', err, '**', data);
-                } else {
-                  GPSdata.ntripservice.status = 'loading'
-                }
-              })
-              // } else {
-              //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
-              //     console.error('error in saving data in DB', err, '**', data);
-              //     if (err) {
-
-              //     } else {
-              //       GPSdata.ntripservice.status = 'running'
-              //     }
-              //   })
-              // }
+              if (!!err && !!stderr) {
+              } else {
+                console.log('no error', ntripData);
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
+                  status: 'loading',
+                  host: ntripData.host,
+                  mountpoint: ntripData.mountpoint,
+                  pass: ntripData.pass,
+                  port: ntripData.port,
+                  user: ntripData.user
+                })}')`, (err, data) => {
+                  if (err) {
+                    console.error('error in saving data in DB', err, '**', data);
+                  } else {
+                    console.log('set ntrip info in storage');
+                    GPSdata.ntripservice.status = 'loading'
+                    GPSdata.ntripservice.host = ntripData.host
+                    GPSdata.ntripservice.mount = ntripData.mountpoint
+                    GPSdata.ntripservice.pass = ntripData.pass
+                    GPSdata.ntripservice.port = ntripData.port
+                    GPSdata.ntripservice.user = ntripData.user
+                  }
+                })
+              }
             }
           );
         } else {
@@ -110,14 +127,14 @@ const startProcess = (params = null) => {
 
 }
 
-const getUptime = () => {
-  cmd.run(
-    `pm2 status`,
-    function (err, data, stderr) {
-      console.log('examples dir now contains the example file along with : ', data)
-    }
-  );
-}
+// const getUptime = () => {
+//   cmd.run(
+//     `pm2 status`,
+//     function (err, data, stderr) {
+//       console.log('examples dir now contains the example file along with : ', data)
+//     }
+//   );
+// }
 
 // const createNTRIP = (params) => {
 //   let container = `cors-ntrip-${params.mounpoint}`;
@@ -147,103 +164,92 @@ const stopProcess = () => {
       console.log('examples dir now contains the example file along with : ', err)
       console.log('examples dir now contains the example file along with : ', stderr)
 
-      // if (!!err && !!stderr) {
-      userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-        if (err) {
-          console.error('error in saving data in DB', err, '**', data);
-        } else {
-          GPSdata.ntripservice.status = 'loading'
-        }
-      })
-      // } else {
-      //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
-      //     console.error('error in saving data in DB', err, '**', data);
-      //     if (err) {
-
-      //     } else {
-      //       GPSdata.ntripservice.status = 'running'
-      //     }
-      //   })
-      // }
-
-    }
-  );
-}
-
-const restartProcess = (params) => {
-  let command
-
-  if (params) {
-    command = `
-    SPORT=/dev/ttyO4
-    BRATE=115200
-    OUTPUT=2
-    CASTER=${params.host}
-    CPORT=${params.port}
-    MOUNTPOINT=${params.mountpoint}
-    CPASS=${params.pass}
-    pm2 start startntripserver.sh
-    `
-  } else {
-    userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
-      if (err) {
-        console.error('there is an error from loading data from database : ****', err);
+      if (!!err && !!stderr) {
       } else {
-        if (data[0]) {
-          console.log('starting ntrip');
-          command = `
-          SPORT=/dev/ttyO4
-          BRATE=115200
-          OUTPUT=2
-          CASTER=${data[0].value.host}
-          CPORT=${data[0].value.port}
-          MOUNTPOINT=${data[0].value.mountpoint}
-          CPASS=${data[0].value.pass}
-          pm2 start startntripserver.sh
-          `
-        } else {
-          return 0
-        }
-      }
-    });
-  }
-  cmd.run(
-    `pm2 stop startntripserver.sh`,
-    function (err, data, stderr) {
-      if (err || stderr) {
-
-      } else {
-        cmd.run(
-          command,
-          function (err, data, stderr) {
-            console.log('examples dir now contains the example file along with : ', data)
-            console.log('examples dir now contains the example file along with : ', err)
-            console.log('examples dir now contains the example file along with : ', stderr)
-
-            // if (!!err && !!stderr) {
-            userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
-              if (err) {
-                console.error('error in saving data in DB', err, '**', data);
-              } else {
-                GPSdata.ntripservice.status = 'loading'
-              }
-            })
-            // } else {
-            //   userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'running')`, (err, data) => {
-            //     console.error('error in saving data in DB', err, '**', data);
-            //     if (err) {
-
-            //     } else {
-            //       GPSdata.ntripservice.status = 'running'
-            //     }
-            //   })
-            // }
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
+          status: 'loading',
+          host: GPSdata.ntripservice.host,
+          mountpoint: GPSdata.ntripservice.mountpoint,
+          pass: GPSdata.ntripservice.pass,
+          port: GPSdata.ntripservice.port,
+          user: GPSdata.ntripservice.user
+        })}')`, (err, data) => {
+          if (err) {
+            console.error('error in saving data in DB', err, '**', data);
+          } else {
+            GPSdata.ntripservice.status = 'loading'
           }
-        );
+        })
       }
     }
   );
 }
+
+// const restartProcess = (params) => {
+//   let command
+
+//   if (params) {
+//     command = `
+//     SPORT=/dev/ttyO4
+//     BRATE=115200
+//     OUTPUT=2
+//     CASTER=${params.host}
+//     CPORT=${params.port}
+//     MOUNTPOINT=${params.mountpoint}
+//     CPASS=${params.pass}
+//     pm2 start startntripserver.sh
+//     `
+//   } else {
+//     userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
+//       if (err) {
+//         console.error('there is an error from loading data from database : ****', err);
+//       } else {
+//         if (data[0]) {
+//           console.log('starting ntrip');
+//           command = `
+//           SPORT=/dev/ttyO4
+//           BRATE=115200
+//           OUTPUT=2
+//           CASTER=${data[0].value.host}
+//           CPORT=${data[0].value.port}
+//           MOUNTPOINT=${data[0].value.mountpoint}
+//           CPASS=${data[0].value.pass}
+//           pm2 start startntripserver.sh
+//           `
+//         } else {
+//           return 0
+//         }
+//       }
+//     });
+//   }
+//   cmd.run(
+//     `pm2 stop startntripserver.sh`,
+//     function (err, data, stderr) {
+//       if (err || stderr) {
+
+//       } else {
+//         cmd.run(
+//           command,
+//           function (err, data, stderr) {
+//             console.log('examples dir now contains the example file along with : ', data)
+//             console.log('examples dir now contains the example file along with : ', err)
+//             console.log('examples dir now contains the example file along with : ', stderr)
+
+//             // if (!!err && !!stderr) {
+//             userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', 'loading')`, (err, data) => {
+//               if (err) {
+//                 console.error('error in saving data in DB', err, '**', data);
+//               } else {
+//                 GPSdata.ntripservice.status = 'loading'
+//               }
+//             })
+//             // }
+//           }
+//         );
+//       }
+//     }
+//   );
+// }
 
 // const getStatusNTRIP = (name = NTRIPObject.NTRIP) => {
 //   cmd.run(`docker logs -n 1 ${name}`, (err, data, stderr) => {
@@ -331,9 +337,9 @@ module.exports = {
   // createNTRIP,
   startProcess,
   stopProcess,
-  restartProcess,
+  // restartProcess,
   // getStatusNTRIP,
-  getUptime,
-  NTRIPObject,
-  envGen
+  // getUptime,
+  // NTRIPObject,
+  // envGen
 };
