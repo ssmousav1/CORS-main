@@ -100,6 +100,7 @@ const startUp = () => {
         GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
         GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
         GPSdata.ntripservice.port = JSON.parse(data[0].value).port
+        GPSdata.ntripservice.user = JSON.parse(data[0].value).user
       } catch (e) {
 
       }

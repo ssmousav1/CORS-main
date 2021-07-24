@@ -46,13 +46,14 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', stderr)
 
         if (!!err && !!stderr) {
-          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', ${JSON.stringify({
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
             status: 'loading',
             host: params.host,
             mountpoint: params.mountpoint,
             pass: params.pass,
-            por: params.port
-          })})`, (err, data) => {
+            port: params.port,
+            user: params.user
+          })}')`, (err, data) => {
             if (err) {
               console.error('error in saving data in DB', err, '**', data);
             } else {
@@ -61,6 +62,7 @@ const startProcess = (params = null) => {
               GPSdata.ntripservice.mount = params.mountpoint
               GPSdata.ntripservice.pass = params.pass
               GPSdata.ntripservice.port = params.port
+              GPSdata.ntripservice.user = params.user
             }
           })
         }
@@ -83,13 +85,14 @@ const startProcess = (params = null) => {
               console.log('examples dir now contains the example file along with : ', stderr)
 
               if (!!err && !!stderr) {
-                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', ${JSON.stringify({
+                userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
                   status: 'loading',
                   host: JSON.parse(data[0].value).host,
                   mountpoint: JSON.parse(data[0].value).mountpoint,
                   pass: JSON.parse(data[0].value).pass,
-                  por: JSON.parse(data[0].value).port
-                })})`, (err, data) => {
+                  port: JSON.parse(data[0].value).port,
+                  user: JSON.parse(data[0].value).user
+                })}')`, (err, data) => {
                   if (err) {
                     console.error('error in saving data in DB', err, '**', data);
                   } else {
@@ -98,6 +101,7 @@ const startProcess = (params = null) => {
                     GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
                     GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
                     GPSdata.ntripservice.port = JSON.parse(data[0].value).port
+                    GPSdata.ntripservice.user = JSON.parse(data[0].value).user
                   }
                 })
               }
@@ -150,13 +154,14 @@ const stopProcess = () => {
       console.log('examples dir now contains the example file along with : ', stderr)
 
       if (!!err && !!stderr) {
-        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', ${JSON.stringify({
+        userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
           status: 'loading',
           host: GPSdata.ntripservice.host,
           mountpoint: GPSdata.ntripservice.mountpoint,
           pass: GPSdata.ntripservice.pass,
-          por: GPSdata.ntripservice.port
-        })})`, (err, data) => {
+          port: GPSdata.ntripservice.port,
+          user: GPSdata.ntripservice.user
+        })}')`, (err, data) => {
           if (err) {
             console.error('error in saving data in DB', err, '**', data);
           } else {
