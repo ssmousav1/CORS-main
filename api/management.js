@@ -8,6 +8,7 @@ const netAccess = require('../helpers/netAccess');
 // const { messagesToWatchdog } = require('../helpers/watchdogInterface');
 // const { WDCommands } = require('../helpers/messages');
 const { startProcess, stopProcess/*, restartProcess*/ } = require('../helpers/NTRIPConfig');
+const { GPSdata } = require('./WS');
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const logger = new Logger().getInstance();
@@ -111,7 +112,14 @@ const handleManageCommands = (command, res, data) => {
     case 'startNTRIP':
       // TODO test this !!
       // TODO IMPORTANT : remember to get data from DB **************
-      startProcess(data)
+      if (GPSdata.ntripservice.status === 'error') {
+        stopProcess()
+        setTimeout(() => {
+          startProcess(data)
+        }, 30000)
+      } else {
+        startProcess(data)
+      }
       // messagesToWatchdog(WDCommands.ntripStart)
       res.status(200).json({ message: `فرمان با موفقیت ارسال شد` });
       break;
