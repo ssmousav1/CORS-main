@@ -70,13 +70,15 @@ const startUp = () => {
       console.log('sudo ./netconfig.sh', stderr)
     }
   );
-  userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', ${JSON.stringify({
+
+  const ntripData = JSON.stringify({
     status: 'loading',
     host: 'GPSdata.ntripservice.host',
     mountpoint: 'GPSdata.ntripservice.mountpoint',
-    pass:' GPSdata.ntripservice.pass',
+    pass: ' GPSdata.ntripservice.pass',
     por: 'GPSdata.ntripservice.port'
-  })})`, (err, data) => {
+  })
+  userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', ${ntripData})`, (err, data) => {
     if (err) {
       console.error('error in saving data in DB', err, '**', data);
     } else {
