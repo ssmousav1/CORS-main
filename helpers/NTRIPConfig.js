@@ -38,6 +38,7 @@ const startProcess = (params = null) => {
 
   if (params) {
     console.log(params);
+    console.log('start ntrip from params');
     cmd.run(
       `SPORT=/dev/ttyO4 BRATE=115200 OUTPUT=2 CASTER=${params.host} CPORT=${params.port} MOUNTPOINT=${params.mountpoint} CPASS=${params.pass} pm2 start startntripserver.sh --no-autorestart`,
       function (err, data, stderr) {
@@ -46,6 +47,7 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', stderr)
 
         if (!!err && !!stderr) {
+          console.log('no error');
           userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
             status: 'loading',
             host: params.host,
@@ -57,6 +59,7 @@ const startProcess = (params = null) => {
             if (err) {
               console.error('error in saving data in DB', err, '**', data);
             } else {
+              console.log('set ntrip data in storage');
               GPSdata.ntripservice.status = 'loading'
               GPSdata.ntripservice.host = params.host
               GPSdata.ntripservice.mount = params.mountpoint
@@ -75,33 +78,38 @@ const startProcess = (params = null) => {
         console.error('there is an error from loading data from database : ****', err);
       } else {
         if (data[0]) {
-          console.log('starting ntrip');
-          console.log(`SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh  --no-autorestart`);
+
+          const ntripData = JSON.parse(data[0].value)
+
+          console.log('starting ntrip', 'ntripData >>>>>>>', ntripData);
+          console.log(`SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${ntripData.host} CPORT=${ntripData.port} MOUNTPOINT=${ntripData.mountpoint} CPASS=${ntripData.pass} pm2 start startntripserver.sh  --no-autorestart`);
           cmd.run(
-            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${JSON.parse(data[0].value).host} CPORT=${JSON.parse(data[0].value).port} MOUNTPOINT=${JSON.parse(data[0].value).mountpoint} CPASS=${JSON.parse(data[0].value).pass} pm2 start startntripserver.sh `,
+            `SPORT=/dev/ttyO4  BRATE=115200 OUTPUT=2 CASTER=${ntripData.host} CPORT=${ntripData.port} MOUNTPOINT=${ntripData.mountpoint} CPASS=${ntripData.pass} pm2 start startntripserver.sh `,
             function (err, data, stderr) {
               console.log('examples dir now contains the example file along with : ', data)
               console.log('examples dir now contains the example file along with : ', err)
               console.log('examples dir now contains the example file along with : ', stderr)
 
               if (!!err && !!stderr) {
+                console.log('no error', ntripData);
                 userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
                   status: 'loading',
-                  host: JSON.parse(data[0].value).host,
-                  mountpoint: JSON.parse(data[0].value).mountpoint,
-                  pass: JSON.parse(data[0].value).pass,
-                  port: JSON.parse(data[0].value).port,
-                  user: JSON.parse(data[0].value).user
+                  host: ntripData.host,
+                  mountpoint: ntripData.mountpoint,
+                  pass: ntripData.pass,
+                  port: ntripData.port,
+                  user: ntripData.user
                 })}')`, (err, data) => {
                   if (err) {
                     console.error('error in saving data in DB', err, '**', data);
                   } else {
+                    console.log('set ntrip info in storage');
                     GPSdata.ntripservice.status = 'loading'
-                    GPSdata.ntripservice.host = JSON.parse(data[0].value).host
-                    GPSdata.ntripservice.mount = JSON.parse(data[0].value).mountpoint
-                    GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
-                    GPSdata.ntripservice.port = JSON.parse(data[0].value).port
-                    GPSdata.ntripservice.user = JSON.parse(data[0].value).user
+                    GPSdata.ntripservice.host = ntripData.host
+                    GPSdata.ntripservice.mount = ntripData.mountpoint
+                    GPSdata.ntripservice.pass = ntripData.pass
+                    GPSdata.ntripservice.port = ntripData.port
+                    GPSdata.ntripservice.user = ntripData.user
                   }
                 })
               }
