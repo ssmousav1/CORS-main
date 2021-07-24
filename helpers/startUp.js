@@ -78,7 +78,7 @@ const startUp = () => {
     pass: ' GPSdata.ntripservice.pass',
     por: 'GPSdata.ntripservice.port'
   })
-  userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', ${ntripData})`, (err, data) => {
+  userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${ntripData}')`, (err, data) => {
     if (err) {
       console.error('error in saving data in DB', err, '**', data);
     } else {
