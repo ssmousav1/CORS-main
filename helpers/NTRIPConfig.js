@@ -47,6 +47,7 @@ const startProcess = (params = null) => {
         console.log('examples dir now contains the example file along with : ', stderr)
 
         if (!!err && !!stderr) {
+        } else {
           console.log('no error');
           userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
             status: 'loading',
@@ -68,6 +69,7 @@ const startProcess = (params = null) => {
               GPSdata.ntripservice.user = params.user
             }
           })
+
         }
       }
     );
@@ -91,6 +93,7 @@ const startProcess = (params = null) => {
               console.log('examples dir now contains the example file along with : ', stderr)
 
               if (!!err && !!stderr) {
+              } else {
                 console.log('no error', ntripData);
                 userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
                   status: 'loading',
@@ -162,6 +165,7 @@ const stopProcess = () => {
       console.log('examples dir now contains the example file along with : ', stderr)
 
       if (!!err && !!stderr) {
+      } else {
         userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
           status: 'loading',
           host: GPSdata.ntripservice.host,
