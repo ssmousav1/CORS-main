@@ -60,7 +60,7 @@ const accessToken = async (req, res, next) => {
 			}
 		});
 	} else {
-		res.status(500).json({ message: 'خطایی رخ داده دوباره امتحان کنید' });
+		res.status(401).json({ message: 'please send token' });
 	}
 }
 

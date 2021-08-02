@@ -8,7 +8,7 @@ const Auth = (req, res, next) => {
   if (req.headers.authorization) {
     jwt.verify(req.headers.authorization, process.env.ACCESS_TOKEN_SECRET || 'accessTokenSecret', (err, user) => {
       if (err) {
-        return res.status(401).json({ message: 'لطفا وارد شوید' });
+        return res.status(406).json({ message: 'لطفا وارد شوید' });
       } else {
         logger.log(`${req.originalUrl} ${req.connection.remoteAddress}   ${req.method}   ${user.username}    ${user.userid} `)
         req.user = user;
@@ -17,7 +17,7 @@ const Auth = (req, res, next) => {
     });
   } else {
     console.error("you need to have access token ")
-    res.status(401).json({ message: 'لطفا وارد شوید' });
+    res.status(406).json({ message: 'لطفا وارد شوید' });
   }
 }
 
