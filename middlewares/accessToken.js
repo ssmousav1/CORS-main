@@ -1,4 +1,4 @@
-const  { userDB } = require("../DB");
+const { userDB } = require("../DB");
 const jwt = require('jsonwebtoken');
 const saltHashPassword = require("../helpers/saltGenerator");
 require('dotenv').config();
@@ -15,7 +15,7 @@ const accessToken = async (req, res, next) => {
 					userDB.all(`SELECT username, admin, network_config, file_download, file_delete, file_edit, ntrip_config, password, id  FROM users WHERE username = '${req.body.username}'`, async (err, data) => {
 						if (err) {
 							console.error('there is an error from loading data from database : ****', err);
-							res.status(500).json({ message: 'error in getting data from DB' });
+							res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
 						} else {
 							if (data[0]) {
 								req.auth = (data[0].password === saltHashPassword(req.body.password, req.body.username).passwordHash)
@@ -56,11 +56,11 @@ const accessToken = async (req, res, next) => {
 				}
 			} else {
 				logger.log(`${req.originalUrl} ${req.connection.remoteAddress}  ${req.method}   ${user.username}    ${user.userid} `)
-				res.status(200).json({ message: 'authorized!', payload: { userInfo: user } });
+				res.status(200).json({ payload: { userInfo: user } });
 			}
 		});
 	} else {
-		res.status(401).json({ message: 'please send token' });
+		res.status(401).json({ message: 'لطفا وارد شوید' });
 	}
 }
 

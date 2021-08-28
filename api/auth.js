@@ -9,11 +9,11 @@ authRouter.post('/login', (req, res) => {
 });
 
 authRouter.post('/logout', (req, res) => {
-  res.status(200).json({ message: 'authRouter! put' });
+  res.status(200).json({ message: 'با موفقیت خارج شدید' });
 });
 
 authRouter.get('/verify-token', (req, res) => {
-  res.status(200).json({ message: 'authRouter! put', payload: { userInfo: req.user } });
+  res.status(200).json({ payload: { userInfo: req.user } });
 });
 
 module.exports = authRouter;

@@ -16,9 +16,9 @@ rawDataRoutes.get('/', (req, res) => {
   rawFiles.all(`SELECT id, filename, size, timestamp  FROM raw_files`, (err, data) => {
     if (err) {
       console.error('there is an error from loading data from database : ****', err);
-      res.status(500).json({ message: 'error in getting data from DB' });
+      res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
     } else {
-      res.status(200).json({ message: 'Connected!', payload: data });
+      res.status(200).json({ payload: data });
     }
   })
 });
@@ -27,12 +27,12 @@ rawDataRoutes.get('/archive-years', (req, res) => {
   rawFiles.get(`SELECT timestamp FROM raw_files WHERE ID = (SELECT MAX(ID) FROM raw_files)`, (err, lastData) => {
     if (err) {
       console.error('there is an error from loading data from database : ****', err);
-      res.status(500).json({ message: 'error in getting data from DB' });
+      res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
     } else {
       rawFiles.get(`SELECT timestamp FROM raw_files WHERE ID = (SELECT MIN(ID) FROM raw_files)`, (err, firstData) => {
         if (err) {
           console.error('there is an error from loading data from database : ****', err);
-          res.status(500).json({ message: 'error in getting data from DB' });
+          res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
         } else {
           let years = []
           if (firstData && lastData) {
@@ -40,13 +40,10 @@ rawDataRoutes.get('/archive-years', (req, res) => {
               years.push(year)
             }
             res.status(200).json({
-              message: 'Connected!',
               payload: { years }
             });
           } else {
-            res.status(404).json({
-              message: 'there is no raw data!'
-            });
+            res.status(404);
           }
         }
       })
@@ -77,11 +74,11 @@ DownloadRawDataRoutes.get('/:filename/:accesstoken', (req, res) => {
           })
         } catch (e) {
 
-		console.log('>>>>>>>>>>>error',e)
-          res.status(500).json({ message: 'error in getting data from DB' });
+          console.log('>>>>>>>>>>>error', e)
+          res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
         }
       } else {
-        res.status(403).json({ message: 'you don not have the right access' });
+        res.status(403).json({ message: 'شما دسترسی ندارید' });
       }
     }
   });
@@ -98,7 +95,7 @@ rawDataRoutes.post('/raw-data-daily', (req, res) => {
       res.status(500).json({ message: 'خطا سرور در استخراج داده' });
     } else {
       if (data[0]) {
-        res.status(200).json({ message: 'Connected!', payload: data });
+        res.status(200).json({ payload: data });
       } else {
         res.status(404).json({ message: 'در این بازه زمانی اطلاعاتی ذخیره نشده است' });
       }
@@ -150,12 +147,12 @@ rawDataConfigRoutes.get('/', (req, res) => {
   userDB.all(`SELECT value  FROM setting WHERE key = 'raw'`, (err, data) => {
     if (err) {
       console.error('there is an error from loading data from database : ****', err);
-      res.status(500).json({ message: 'error in getting data from DB' });
+      res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
     } else {
       if (data[0]) {
-        res.status(200).json({ message: 'Connected!', payload: JSON.parse(data[0].value) });
+        res.status(200).json({ payload: JSON.parse(data[0].value) });
       } else {
-        res.status(404).json({ message: 'there is no data!' });
+        res.status(404);
       }
     }
   })

@@ -9,18 +9,18 @@ routes.get('/', (req, res) => {
     userDB.all(`SELECT username, admin, network_config, file_download, file_edit, ntrip_config,file_delete, id  FROM users WHERE username = '${req.body.username}'`, (err, data) => {
       if (err) {
         console.error('there is an error from loading data from database : ****', err);
-        res.status(500).json({ message: 'error in getting data from DB' });
+        res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
       } else {
-        res.status(200).json({ message: 'Connected!', payload: data });
+        res.status(200).json({ payload: data });
       }
     });
   } else {
     userDB.all("SELECT username, admin, network_config, file_download, file_edit,file_delete, ntrip_config, id  FROM users", (err, data) => {
       if (err) {
         console.error('there is an error from loading data from database : ****', err);
-        res.status(500).json({ message: 'error in getting data from DB' });
+        res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
       } else {
-        res.status(200).json({ message: 'Connected!', payload: data });
+        res.status(200).json({ payload: data });
       }
     });
   }

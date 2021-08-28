@@ -21,7 +21,7 @@ managementRouter.get('/netaccess', (req, res) => {
       res.status(200).json({ net_access: !respond })
     })
     .catch(error => {
-      res.status(500).json({ message: 'there was an error ' })
+      res.status(500).json({ error: 'there was an error ' })
     })
 })
 
@@ -29,10 +29,10 @@ managementRouter.get('/ssh', (req, res) => {
   userDB.all(`SELECT value FROM setting WHERE key = 'ssh'`, (err, data) => {
     if (err) {
       console.error('there is an error from loading data from database : ****', err);
-      res.status(500).json({ message: 'error in getting data from DB' });
+      res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
     } else {
       if (data[0]) {
-        res.status(200).json({ message: 'Connected!', payload: parseInt(data[0].value) });
+        res.status(200).json({payload: parseInt(data[0].value) });
       }
     }
   });
