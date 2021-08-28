@@ -9,12 +9,12 @@ positionsRoutes.get('/', (req, res) => {
   userDB.all(`SELECT value  FROM setting WHERE key = 'position'`, (err, data) => {
     if (err) {
       console.error('there is an error from loading data from database : ****', err);
-      res.status(500).json({ message: 'error in getting data from DB' });
+      res.status(500).json({ message: 'خطا در دریافت اطلاعات' });
     } else {
       if (data[0]) {
-        res.status(200).json({ message: 'Connected position!', payload: JSON.parse(data[0].value) });
+        res.status(200).json({ payload: JSON.parse(data[0].value) });
       } else {
-        res.status(200).json({ message: 'Connected position! there is no data' });
+        res.status(200);
       }
     }
   });

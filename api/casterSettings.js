@@ -10,12 +10,12 @@ casterRoutes.get('/', (req, res) => {
   userDB.all(`SELECT value  FROM setting WHERE key = 'caster'`, (err, data) => {
     if (err) {
       console.error('there is an error from loading data from database : ****', err);
-      res.status(500).json({ message: 'error in getting data from DB' });
+      res.status(500).json({ error: 'error in getting data from DB' });
     } else {
       if (data[0]) {
-        res.status(200).json({ message: 'Connected caster!', payload: JSON.parse(data[0].value) });
+        res.status(200).json({ payload: JSON.parse(data[0].value) });
       } else {
-        res.status(200).json({ message: 'Connected caster! there is no data' });
+        res.status(200);
       }
     }
   });
