@@ -48,6 +48,7 @@ const managementRouter = require("./api/management");
 // const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
 // const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
 const { storageCapacity } = require("./helpers/storageCapacity");
+const { userDB } = require("./DB");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const NMEAparser = NMEAPort.pipe(new Readline({ delimiter: "\r\n" }));
@@ -176,14 +177,58 @@ setInterval(() => {
     function (err, data, stderr) {
       console.log('pm2 status >>>>', data.indexOf('online', data.indexOf('startntripserver')))
       if (!!err || !!stderr) {
-        // GPSdata.ntripservice.status = ''
       } else if (data.indexOf('online', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
         console.log(data.indexOf('online', data.indexOf('startntripserver')), data.indexOf('startntripserver'), '****');
-        GPSdata.ntripservice.status = 'running'
+        if (GPSdata.ntripservice.status != 'running') {
+          GPSdata.ntripservice.status = 'running'
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
+            status: 'running',
+            host: GPSdata.ntripservice.host,
+            mountpoint: GPSdata.ntripservice.mountpoint,
+            pass: GPSdata.ntripservice.pass,
+            port: GPSdata.ntripservice.port,
+            user: GPSdata.ntripservice.user
+          })}')`, (err, data) => {
+            if (err) {
+              console.error('error in saving data in DB', err, '**', data);
+            } else {
+            }
+          })
+        }
       } else if (data.indexOf('errored', data.indexOf('startntripserver')) > 0 && data.indexOf('startntripserver') > 0) {
-        GPSdata.ntripservice.status = 'error'
+        if (GPSdata.ntripservice.status != 'error') {
+          GPSdata.ntripservice.status = 'error'
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
+            status: 'error',
+            host: GPSdata.ntripservice.host,
+            mountpoint: GPSdata.ntripservice.mountpoint,
+            pass: GPSdata.ntripservice.pass,
+            port: GPSdata.ntripservice.port,
+            user: GPSdata.ntripservice.user
+          })}')`, (err, data) => {
+            if (err) {
+              console.error('error in saving data in DB', err, '**', data);
+            } else {
+            }
+          })
+        }
       } else {
-        GPSdata.ntripservice.status = 'stopped'
+        if (GPSdata.ntripservice.status != 'stopped') {
+          GPSdata.ntripservice.status = 'stopped'
+          userDB.run(`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify({
+            status: 'stopped',
+            host: GPSdata.ntripservice.host,
+            mountpoint: GPSdata.ntripservice.mountpoint,
+            pass: GPSdata.ntripservice.pass,
+            port: GPSdata.ntripservice.port,
+            user: GPSdata.ntripservice.user
+          })}')`, (err, data) => {
+            if (err) {
+              console.error('error in saving data in DB', err, '**', data);
+            } else {
+            }
+          })
+        }
       }
     }
   );
