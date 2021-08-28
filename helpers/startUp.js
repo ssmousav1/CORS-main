@@ -13,6 +13,7 @@ const { checkNTRIP } = require("./checkNTRIP");
 const { configRAW, configNMEA, configRTCM } = require("./configPorts");
 const { userDB } = require("../DB");
 const { GPSdata } = require('../api/WS');
+const { startProcess } = require('./NTRIPConfig');
 // const { startProcess, envGen } = require('./NTRIPConfig');
 
 const logger = new Logger().getInstance();
@@ -101,6 +102,9 @@ const startUp = () => {
         GPSdata.ntripservice.pass = JSON.parse(data[0].value).pass
         GPSdata.ntripservice.port = JSON.parse(data[0].value).port
         GPSdata.ntripservice.user = JSON.parse(data[0].value).user
+        if (JSON.parse(data[0].value).status === 'running') {
+          startProcess()
+        }
       } catch (e) {
 
       }
