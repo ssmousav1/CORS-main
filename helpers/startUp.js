@@ -45,9 +45,9 @@ const startUp = () => {
     }
   })
 
-  // config ports
-  configRAW(NMEAPort);
-  configNMEA(NMEAPort);
+  // // config ports
+  // configRAW(NMEAPort);
+  // configNMEA(NMEAPort);
   if (process.env.LAT && process.env.LON && process.env.ALT) {
     configRTCM(NMEAPort, {
       lat: process.env.LAT,
