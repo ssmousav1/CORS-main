@@ -66,6 +66,8 @@ const configNMEA = (writePort, port = null) => {
 }
 
 const configRTCM = (writePort, params = null) => {
+  console.log('configRTCM',params);
+  return 0
   let { lat, lon, alt, port } = params
 
   if (!lat && !lon && !alt) {

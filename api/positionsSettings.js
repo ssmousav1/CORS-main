@@ -53,27 +53,17 @@ positionsRoutes.put('/', (req, res) => {
           status: 200
         });
 
-        
+        console.log('****** config RTCM ******', {
+          lat: req.body.lat,
+          lon: req.body.lon,
+          alt: req.body.alt
+        });
         configRTCM(NMEAPort, {
           lat: req.body.lat,
           lon: req.body.lon,
           alt: req.body.alt
         })
-        // configRTCM('hemi', 'PORTC', 1, req.body.lat, req.body.lon, req.body.alt)
 
-        // cmd.run(`echo 0 > /sys/class/gpio/gpio45/value`, (err, data, stderr) => {
-        //   if (err) {
-        //     console.log(err);
-        //   } else {
-        //     cmd.run(`echo 1 > /sys/class/gpio/gpio45/value`, (err, data, stderr) => {
-        //       if (err) {
-        //         console.log(err);
-        //       } else {
-
-        //       }
-        //     });
-        //   }
-        // });
       }
     });
   }
