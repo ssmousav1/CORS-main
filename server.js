@@ -92,7 +92,16 @@ let rawdataTime;
 
 try {
   console.log("Configuration ...");
-  let res = cmd.runSync("./init.js");
+  cmd.run("./init.js", (err, data, stderr) => {
+    console.log('./init.js', data)
+    console.log('./init.js', err)
+    console.log('./init.js', stderr)
+    if (err) {
+    } else {
+      console.log(`success: ./init.js`);
+    }
+  }
+  );
   console.log("Configuration done");
 } catch (error) {
   console.log(error);
