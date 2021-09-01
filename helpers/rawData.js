@@ -6,6 +6,9 @@ const archiver = require('archiver');
 const unzipper = require('unzipper');
 const { GPSdata } = require("../api/WS");
 const eventlib = new eventEmitterBuilder().getInstance();
+const gpio = require("onoff").Gpio;
+
+const button = new gpio(66, "in", 'falling')
 
 let flag = true
 let fileName = new Date(GPSdata.time).getTime() || Date.now()
@@ -17,14 +20,14 @@ let writeStream
 
 
 const saveRawData = (data) => {
-//	console.log(new Date(GPSdata.time).getTime())
+  //	console.log(new Date(GPSdata.time).getTime())
   // TODO disable this condition if there is no storage data
   // if (GPSdata.deviceStatus.storage.percent < 90) {
-    if (flag) {
-      writeStream = fs.createWriteStream(`${fileName}.bin`);
-      flag = false
-    }
-    writeStream.write(data)
+  if (flag) {
+    writeStream = fs.createWriteStream(`${fileName}.bin`);
+    flag = false
+  }
+  writeStream.write(data)
   // }
 }
 
@@ -46,6 +49,22 @@ const startInterval = (TimeOut) => {
 }
 
 startInterval(timeOut)
+
+
+
+button.watch((err, value) => {
+  if (err) {
+    throw err;
+  }
+  console.log('....', value)
+  writeStream.destroy()
+  flag = !flag
+  //    fileName = new Date(GPSdata.time).getTime() || Date.now()
+  fileName = Date.now();
+  writeStream = fs.createWriteStream(`${fileName}.bin`);
+});
+
+
 
 eventlib.on('rawDataTimeout', newTimeOut => {
   flag = false
@@ -109,7 +128,6 @@ function zipRaw(pathBIN) {
 
 eventlib.on("row:inserted", (filename) => {
   // extractRaw(filename, "./");
-  
   // fs.unlinkSync(`./${filename}.bin`);
   fs.unlinkSync(`./${filename}.zip`);
 });
