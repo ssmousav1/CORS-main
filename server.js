@@ -10,13 +10,7 @@ require("dotenv").config();
 const eventEmitterBuilder = require("./helpers/globalEventEmitter");
 const { saveRawData } = require("./helpers/rawData");
 const { NMEAPort, rawDataPort } = require("./helpers/globalPorts");
-const gatewayAccess = require("./helpers/gatewayAccess");
 const startUp = require("./helpers/startUp");
-// const {
-//   messagesToWatchdog,
-//   statusMessagesToWatchdog,
-// } = require("./helpers/watchdogInterface");
-// middlewares
 const Auth = require("./middlewares/authentication");
 const accessToken = require("./middlewares/accessToken");
 const fileUpload = require("express-fileupload");
@@ -44,9 +38,6 @@ const {
   DownloadRawDataRoutes,
 } = require("./api/rawData");
 const managementRouter = require("./api/management");
-// const { socketMessages } = require("./helpers/socketMessages");
-// const { LEDCommands, WDCommands, smokeTest } = require("./helpers/messages");
-// const { configRAW, configNMEA, configRTCM } = require("./helpers/configPorts");
 const { storageCapacity } = require("./helpers/storageCapacity");
 const { userDB } = require("./DB");
 
@@ -91,9 +82,38 @@ let nmeaTime;
 let rawdataTime;
 
 try {
-  console.log("Configuration ...");
-  let res = cmd.runSync("./init.js");
-  console.log("Configuration done");
+  console.log(" >>>>>>>>>>>>>>>Configuration ...");
+  cmd.run('sudo ./start.sh', (err, data, stderr) => {
+    console.log('sudo ./start.sh data :', data)
+    console.log('sudo ./start.sh error : ', err)
+    console.log('sudo ./start.sh stderr :', stderr)
+    if (err) {
+    } else {
+      console.log(`success: sudo ./start.sh`);
+      cmd.run('node config19.js', (err, data, stderr) => {
+        console.log('node config19.js data :', data)
+        console.log('node config19.js error : ', err)
+        console.log('node config19.js stderr :', stderr)
+        if (err) {
+        } else {
+          console.log(`success: node config19.js`);
+          cmd.run('node config115.js', (err, data, stderr) => {
+            console.log('node config115.js data :', data)
+            console.log('node config115.js error : ', err)
+            console.log('node config115.js stderr :', stderr)
+            if (err) {
+            } else {
+              console.log(`success: node config115.js`);
+            }
+          }
+          );
+        }
+      }
+      );
+    }
+  }
+  );
+  console.log(" >>>>>>>>>>>>>>>Configuration done");
 } catch (error) {
   console.log(error);
   process.exit();

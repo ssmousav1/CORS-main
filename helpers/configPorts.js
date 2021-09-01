@@ -91,8 +91,9 @@ const configRTCM = (writePort, params = null) => {
     // Save
     `$JSAVE\r\n`,
   ];
-
+  console.log(`$JRTK,1,${lat},${lon},${alt}\r\n`);
   commands.forEach(command => {
+    console.log('****',command);
     writePort.write(command)
     console.log('config RTCM , command :', command);
   })
