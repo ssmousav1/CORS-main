@@ -1,10 +1,15 @@
 {
   "name": "back-cors",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "An app to run cors features",
   "main": "server.js",
   "bin": {
     "back-cors": "./server.js"
+  },
+  "scripts": {
+    "update-version": "apv update",
+    "update-status": "apv set-status",
+    "gen-badge": "apv generate-badge"
   },
   "repository": {
     "type": "git",
