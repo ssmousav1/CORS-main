@@ -90,14 +90,14 @@ try {
     if (err) {
     } else {
       console.log(`success: sudo ./start.sh`);
-      cmd.run('node config19.js', (err, data, stderr) => {
+      cmd.run('node ./configs/config19.js', (err, data, stderr) => {
         console.log('node config19.js data :', data)
         console.log('node config19.js error : ', err)
         console.log('node config19.js stderr :', stderr)
         if (err) {
         } else {
           console.log(`success: node config19.js`);
-          cmd.run('node config115.js', (err, data, stderr) => {
+          cmd.run('node ./configs/config115.js', (err, data, stderr) => {
             console.log('node config115.js data :', data)
             console.log('node config115.js error : ', err)
             console.log('node config115.js stderr :', stderr)
