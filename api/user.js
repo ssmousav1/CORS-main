@@ -124,10 +124,11 @@ routes.put('/', (req, res) => {
         res.status(500).json({ message: 'خطا در استخراج اطلاعات ' });
       } else {
         if (data[0]) {
-          if ((old_password && data[0].password === saltHashPassword(old_password, req.user.username).passwordHash) || !old_password) {
+          console.log(old_password , data[0].password === saltHashPassword(old_password, req.user.username).passwordHash ,data[0].password, saltHashPassword(old_password, req.user.username).passwordHash);
+          if (old_password && data[0].password === saltHashPassword(old_password, req.user.username).passwordHash) {
             userDB.run(`UPDATE users SET 
             username = '${username}', 
-            ${new_password && username && old_password ? `password = '${saltHashPassword(new_password, username).passwordHash}',` : ''}
+            ${new_password  ? `password = '${saltHashPassword(new_password, username).passwordHash}',` : ''}
             admin = ${admin}, 
             network_config = ${network_config}, 
             file_download = ${file_download}, 
@@ -145,7 +146,7 @@ routes.put('/', (req, res) => {
               });
 
           } else {
-            res.status(401).json({ message: 'رمز عبور قدیمی اشتباه است' });
+            res.status(401).json({ message: 'رمز عبور را وارد کنید' });
           }
         } else {
           res.status(400).json({ message: 'این کاربر وجود ندارد' });
