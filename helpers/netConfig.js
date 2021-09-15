@@ -2,7 +2,9 @@
 const fs = require("fs");
 const cmd = require("node-cmd");
 const nc = require("network-calculator");
+const { networkInterfaces } = require('os');
 
+const nets = networkInterfaces();
 const pathBASE = process.cwd();
 
 const setIP = (params) => {
@@ -45,4 +47,8 @@ const setNetwork = ({ ip, mask, gateway }) => {
   );
 }
 
-module.exports = { setIP, setNetwork }
+const getIP = () => {
+  return nets.eth0[0].address
+}
+
+module.exports = { setIP, setNetwork, getIP }
