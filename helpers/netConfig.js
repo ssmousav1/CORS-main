@@ -3,6 +3,7 @@ const fs = require("fs");
 const cmd = require("node-cmd");
 const nc = require("network-calculator");
 const { networkInterfaces } = require('os');
+const { GPSdata } = require("../api/WS");
 
 const nets = networkInterfaces();
 const pathBASE = process.cwd();
@@ -41,8 +42,12 @@ const setNetwork = ({ ip, mask, gateway }) => {
     'sudo ./netconfig.sh',
     function (err, data, stderr) {
       console.log('sudo ./netconfig.sh', data)
-      console.log('sudo ./netconfig.sh', err)
       console.log('sudo ./netconfig.sh', stderr)
+      if (err) {
+        console.log('sudo ./netconfig.sh', err)
+      } else {
+        GPSdata.deviceStatus.IP = ip
+      }
     }
   );
 }
