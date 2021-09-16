@@ -55,7 +55,8 @@ let GPSdata = {
     NTRIPStatus: null,
     power: null,
     uptime: null,
-    deviceHealth: null
+    deviceHealth: null,
+    IP: null
   },
   totalRms: null,
   semiMajorError: null,
