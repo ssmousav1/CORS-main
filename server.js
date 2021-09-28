@@ -40,6 +40,7 @@ const {
 const managementRouter = require("./api/management");
 const { storageCapacity } = require("./helpers/storageCapacity");
 const { userDB } = require("./DB");
+const { getIP } = require("./helpers/netConfig");
 
 const eventEmitter = new eventEmitterBuilder().getInstance();
 const NMEAparser = NMEAPort.pipe(new Readline({ delimiter: "\r\n" }));
@@ -89,27 +90,27 @@ try {
     console.log('sudo ./start.sh stderr :', stderr)
     if (err) {
     } else {
-      console.log(`success: sudo ./start.sh`);
-      cmd.run('node ./configs/config19.js', (err, data, stderr) => {
-        console.log('node config19.js data :', data)
-        console.log('node config19.js error : ', err)
-        console.log('node config19.js stderr :', stderr)
-        if (err) {
-        } else {
-          console.log(`success: node config19.js`);
-          cmd.run('node ./configs/config115.js', (err, data, stderr) => {
-            console.log('node config115.js data :', data)
-            console.log('node config115.js error : ', err)
-            console.log('node config115.js stderr :', stderr)
-            if (err) {
-            } else {
-              console.log(`success: node config115.js`);
-            }
-          }
-          );
-        }
-      }
-      );
+      // console.log(`success: sudo ./start.sh`);
+      // cmd.run('node ./configs/config19.js', (err, data, stderr) => {
+      //   console.log('node config19.js data :', data)
+      //   console.log('node config19.js error : ', err)
+      //   console.log('node config19.js stderr :', stderr)
+      //   if (err) {
+      //   } else {
+      //     console.log(`success: node config19.js`);
+      //     cmd.run('node ./configs/config115.js', (err, data, stderr) => {
+      //       console.log('node config115.js data :', data)
+      //       console.log('node config115.js error : ', err)
+      //       console.log('node config115.js stderr :', stderr)
+      //       if (err) {
+      //       } else {
+      //         console.log(`success: node config115.js`);
+      //       }
+      //     }
+      //     );
+      //   }
+      // }
+      // );
     }
   }
   );
@@ -253,8 +254,12 @@ setInterval(() => {
     }
   );
 
-
+  // check storage capacity
   storageCapacity()
+
+  // setIP
+  GPSdata.deviceStatus.IP = getIP()
+
 }, 60000);
 
 //  server connection
