@@ -121,6 +121,9 @@ app.use('/management', managementValidator(), managementRouter);
 let nmeaTime;
 let rawdataTime;
 
+let rawCount = 0;
+let nmeaCount = 0;
+
 board.on('ready', function () {
 	try {
 		const oem = new five.Pin(gpioAdapter.oemEn.header);
@@ -145,8 +148,11 @@ board.on('ready', function () {
 
 NMEAparser.on('data', (data) => {
 	nmeaTime = Date.now();
-	console.log(`NMEA Data: >>>`);
-	console.log(data.toString());
+	if (nmeaCount % 10 == 0) {
+		console.log(`NMEA Data: >>>`);
+		console.log(data.toString());
+	}
+	nmeaCount += 1;
 	try {
 		const packet = nmea.parseNmeaSentence(data);
 		eventEmitter.emit('WSData');
@@ -158,8 +164,11 @@ NMEAparser.on('data', (data) => {
 
 rawDataPort.on('data', (data) => {
 	rawdataTime = Date.now();
-	console.log(`Raw Data: >>>`);
-	console.log(data.toString());
+	if (rawCount % 10 == 0) {
+		console.log(`Raw Data: >>>`);
+		console.log(data.toString());
+	}
+	rawCount += 1;
 	saveRawData(data);
 });
 
