@@ -145,6 +145,7 @@ board.on('ready', function () {
 
 NMEAparser.on('data', (data) => {
 	nmeaTime = Date.now();
+	console.log(`NMEA Data: >>>`);
 	console.log(data.toString());
 	try {
 		const packet = nmea.parseNmeaSentence(data);
