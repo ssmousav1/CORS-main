@@ -11,8 +11,8 @@ const BeagleBone = require('beaglebone-io');
 require('dotenv').config();
 
 // helpers
-const setupOEM19 = require('./configs/config19');
-const setupOEM115 = require('./configs/config115');
+const oem19 = require('./configs/config19');
+const oem115 = require('./configs/config115');
 const eventEmitterBuilder = require('./helpers/globalEventEmitter');
 const { saveRawData } = require('./helpers/rawData');
 const { NMEAPort, rawDataPort } = require('./helpers/globalPorts');
@@ -135,8 +135,8 @@ board.on('ready', function () {
 			});
 		});
 
-		setupOEM19();
-		setupOEM115();
+		oem19.setupOEM19();
+		oem115.setupOEM115();
 	} catch (err) {
 		console.error(`Board Error >>> ${err}`);
 		process.exit(0);
