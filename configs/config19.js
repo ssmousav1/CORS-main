@@ -1,6 +1,6 @@
 const SerialPort = require('serialport');
 
-module.exports.setupOEM19 = () => {
+export const setupOEM19 = () => {
 	const rawDataPort = new SerialPort('/dev/ttyO4', {
 		baudRate: 19200,
 	});
