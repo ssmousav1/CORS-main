@@ -1,6 +1,6 @@
 const SerialPort = require('serialport');
 
-export const setupOEM115 = () => {
+const setupOEM115 = () => {
 	const rawDataPort = new SerialPort('/dev/ttyO4', {
 		baudRate: 115200,
 	});
@@ -64,3 +64,5 @@ export const setupOEM115 = () => {
 		console.log('115200 >> Port is closed');
 	});
 };
+
+module.exports = { setupOEM115 };
