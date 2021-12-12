@@ -128,6 +128,7 @@ board.on('ready', function () {
 
 NMEAparser.on('data', (data) => {
 	nmeaTime = Date.now();
+	console.log(data.toString());
 	try {
 		const packet = nmea.parseNmeaSentence(data);
 		eventEmitter.emit('WSData');
@@ -139,6 +140,8 @@ NMEAparser.on('data', (data) => {
 
 rawDataPort.on('data', (data) => {
 	rawdataTime = Date.now();
+	console.log(`Raw Data: >>>`);
+	console.log(data.toString());
 	saveRawData(data);
 });
 
