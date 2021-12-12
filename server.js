@@ -157,7 +157,8 @@ NMEAparser.on('data', (data) => {
 		const packet = nmea.parseNmeaSentence(data);
 		eventEmitter.emit('WSData');
 		let satData = handleWebSocket(packet);
-		if (nmeaCount % 10 === 0) console.log(satData.active_satellites);
+		if (nmeaCount % 10 === 0)
+			console.log(JSON.parse(satData).active_satellites);
 	} catch (err) {
 		console.error(`NMEA Error >>> ${err}`);
 	}
