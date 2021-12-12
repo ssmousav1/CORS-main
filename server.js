@@ -148,17 +148,13 @@ board.on('ready', function () {
 
 NMEAparser.on('data', (data) => {
 	nmeaTime = Date.now();
-	if (nmeaCount % 10 == 0) {
-		console.log(`NMEA Data: >>>`);
-		console.log(data.toString());
-	}
-	nmeaCount += 1;
 	try {
 		const packet = nmea.parseNmeaSentence(data);
 		eventEmitter.emit('WSData');
 		let satData = handleWebSocket(packet);
 		if (nmeaCount % 10 === 0)
 			console.log(JSON.parse(satData).active_satellites);
+		nmeaCount += 1;
 	} catch (err) {
 		console.error(`NMEA Error >>> ${err}`);
 	}
