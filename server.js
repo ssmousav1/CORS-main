@@ -11,6 +11,8 @@ const BeagleBone = require('beaglebone-io');
 require('dotenv').config();
 
 // helpers
+const setupOEM19 = require('./configs/config19');
+const setupOEM115 = require('./configs/config115');
 const eventEmitterBuilder = require('./helpers/globalEventEmitter');
 const { saveRawData } = require('./helpers/rawData');
 const { NMEAPort, rawDataPort } = require('./helpers/globalPorts');
@@ -62,12 +64,31 @@ const server = new WebSocket.Server({
 });
 
 // Pin controller
-const gpioAdapter = {
-	oemEn: {
-		gpio: 45,
-		header: 'P8_11',
-	},
-};
+// const gpioAdapter = {
+// 	oemEn: {
+// 		gpio: 45,
+// 		header: 'P8_11',
+// 	},
+// 	rxUART4: { gpio: 30, header: 'P9_11' },
+// 	txUART4: { gpio: 31, header: 'P9_11' },
+// 	rxUART1: { gpio: 14, header: 'P9_26' },
+// 	txUART1: { gpio: 15, header: 'P9_24' },
+// 	rxUART2: { gpio: 2, header: 'P9_22' },
+// 	txUART2: { gpio: 3, header: 'P9_21' },
+// 	rxUART5: { gpio: 79, header: 'P8_38' },
+// 	txUART5: { gpio: 78, header: 'P8_37' },
+// };
+
+const gpioAdapter = [
+	'P9_11',
+	'P9_11',
+	'P9_26',
+	'P9_24',
+	'P9_22',
+	'P9_21',
+	'P8_38',
+	'P8_37',
+];
 
 const board = new five.Board({
 	io: new BeagleBone(),
@@ -104,27 +125,23 @@ board.on('ready', function () {
 	try {
 		const oem = new five.Pin(gpioAdapter.oemEn.header);
 		oem.high();
+
+		// Config UART pins
+		gpioAdapter.forEach((pin) => {
+			cmd.run(`config-pin ${pin} uart`, (err, data, stderr) => {
+				console.log(`pin-config ${pin} >>> data:`, data);
+				console.log(`pin-config ${pin} >>> err:`, err);
+				console.log(`pin-config ${pin} >>> stderr:`, stderr);
+			});
+		});
+
+		setupOEM19();
+		setupOEM115();
 	} catch (err) {
 		console.error(`Board Error >>> ${err}`);
 		process.exit(0);
 	}
 });
-
-// try {
-// 	console.log(' >>>>>>>>>>>>>>>Configuration ...');
-// 	cmd.run('sudo ./start.sh', (err, data, stderr) => {
-// 		console.log('sudo ./start.sh data :', data);
-// 		console.log('sudo ./start.sh error : ', err);
-// 		console.log('sudo ./start.sh stderr :', stderr);
-// 		if (err) {
-// 		} else {
-// 		}
-// 	});
-// 	console.log(' >>>>>>>>>>>>>>>Configuration done');
-// } catch (error) {
-// 	console.log(error);
-// 	process.exit();
-// }
 
 NMEAparser.on('data', (data) => {
 	nmeaTime = Date.now();
@@ -144,100 +161,6 @@ rawDataPort.on('data', (data) => {
 	console.log(data.toString());
 	saveRawData(data);
 });
-
-// setInterval(() => {
-// 	cmd.run('pm2 status', function (err, data, stderr) {
-// 		console.log(
-// 			'pm2 status >>>>',
-// 			data.indexOf('online', data.indexOf('startntripserver'))
-// 		);
-// 		if (!!err || !!stderr) {
-// 		} else if (
-// 			data.indexOf('online', data.indexOf('startntripserver')) > 0 &&
-// 			data.indexOf('startntripserver') > 0
-// 		) {
-// 			console.log(
-// 				data.indexOf('online', data.indexOf('startntripserver')),
-// 				data.indexOf('startntripserver'),
-// 				'****'
-// 			);
-// 			if (GPSdata.ntripservice.status != 'running') {
-// 				GPSdata.ntripservice.status = 'running';
-// 				userDB.run(
-// 					`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify(
-// 						{
-// 							status: 'running',
-// 							host: GPSdata.ntripservice.host,
-// 							mountpoint: GPSdata.ntripservice.mountpoint,
-// 							pass: GPSdata.ntripservice.pass,
-// 							port: GPSdata.ntripservice.port,
-// 							user: GPSdata.ntripservice.user,
-// 						}
-// 					)}')`,
-// 					(err, data) => {
-// 						if (err) {
-// 							console.error('error in saving data in DB', err, '**', data);
-// 						} else {
-// 						}
-// 					}
-// 				);
-// 			}
-// 		} else if (
-// 			data.indexOf('errored', data.indexOf('startntripserver')) > 0 &&
-// 			data.indexOf('startntripserver') > 0
-// 		) {
-// 			if (GPSdata.ntripservice.status != 'error') {
-// 				GPSdata.ntripservice.status = 'error';
-// 				userDB.run(
-// 					`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify(
-// 						{
-// 							status: 'error',
-// 							host: GPSdata.ntripservice.host,
-// 							mountpoint: GPSdata.ntripservice.mountpoint,
-// 							pass: GPSdata.ntripservice.pass,
-// 							port: GPSdata.ntripservice.port,
-// 							user: GPSdata.ntripservice.user,
-// 						}
-// 					)}')`,
-// 					(err, data) => {
-// 						if (err) {
-// 							console.error('error in saving data in DB', err, '**', data);
-// 						} else {
-// 						}
-// 					}
-// 				);
-// 			}
-// 		} else {
-// 			if (GPSdata.ntripservice.status != 'stopped') {
-// 				GPSdata.ntripservice.status = 'stopped';
-// 				userDB.run(
-// 					`INSERT OR REPLACE INTO setting (key, value) values ('ntrip', '${JSON.stringify(
-// 						{
-// 							status: 'stopped',
-// 							host: GPSdata.ntripservice.host,
-// 							mountpoint: GPSdata.ntripservice.mountpoint,
-// 							pass: GPSdata.ntripservice.pass,
-// 							port: GPSdata.ntripservice.port,
-// 							user: GPSdata.ntripservice.user,
-// 						}
-// 					)}')`,
-// 					(err, data) => {
-// 						if (err) {
-// 							console.error('error in saving data in DB', err, '**', data);
-// 						} else {
-// 						}
-// 					}
-// 				);
-// 			}
-// 		}
-// 	});
-
-// 	// check storage capacity
-// 	storageCapacity();
-
-// 	// setIP
-// 	GPSdata.deviceStatus.IP = getIP();
-// }, 60000);
 
 //  server connection
 let messageInterval = null;
