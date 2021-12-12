@@ -12,11 +12,11 @@ const startUp = () => {
 	console.log('start up');
 	logger.log('app started');
 
-	cmd.run('sudo ./netconfig.sh', (err, data, stderr) => {
-		console.log('sudo ./netconfig.sh', data);
-		console.log('sudo ./netconfig.sh', err);
-		console.log('sudo ./netconfig.sh', stderr);
-	});
+	// cmd.run('sudo ./netconfig.sh', (err, data, stderr) => {
+	// 	console.log('sudo ./netconfig.sh', data);
+	// 	console.log('sudo ./netconfig.sh', err);
+	// 	console.log('sudo ./netconfig.sh', stderr);
+	// });
 
 	// Load NTRIP server last status
 	userDB.all(`SELECT value  FROM setting WHERE key = 'ntrip'`, (err, data) => {
@@ -44,13 +44,13 @@ const startUp = () => {
 	// // config ports
 	// configRAW(NMEAPort);
 	// configNMEA(NMEAPort);
-	if (process.env.LAT && process.env.LON && process.env.ALT) {
-		configRTCM(NMEAPort, {
-			lat: process.env.LAT,
-			lon: process.env.LON,
-			alt: process.env.ALT,
-		});
-	}
+	// if (process.env.LAT && process.env.LON && process.env.ALT) {
+	// 	configRTCM(NMEAPort, {
+	// 		lat: process.env.LAT,
+	// 		lon: process.env.LON,
+	// 		alt: process.env.ALT,
+	// 	});
+	// }
 };
 
 module.exports = startUp;
