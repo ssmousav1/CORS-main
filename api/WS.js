@@ -140,7 +140,7 @@ const handleWebSocket = (data) => {
 		default:
 			break;
 	}
-	console.log(GPSdata);
+
 	return JSON.stringify(GPSdata);
 };
 
