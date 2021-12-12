@@ -64,22 +64,22 @@ const server = new WebSocket.Server({
 });
 
 // Pin controller
-// const gpioAdapter = {
-// 	oemEn: {
-// 		gpio: 45,
-// 		header: 'P8_11',
-// 	},
-// 	rxUART4: { gpio: 30, header: 'P9_11' },
-// 	txUART4: { gpio: 31, header: 'P9_11' },
-// 	rxUART1: { gpio: 14, header: 'P9_26' },
-// 	txUART1: { gpio: 15, header: 'P9_24' },
-// 	rxUART2: { gpio: 2, header: 'P9_22' },
-// 	txUART2: { gpio: 3, header: 'P9_21' },
-// 	rxUART5: { gpio: 79, header: 'P8_38' },
-// 	txUART5: { gpio: 78, header: 'P8_37' },
-// };
+const gpioAdapter = {
+	oemEn: {
+		gpio: 45,
+		header: 'P8_11',
+	},
+	// 	rxUART4: { gpio: 30, header: 'P9_11' },
+	// 	txUART4: { gpio: 31, header: 'P9_11' },
+	// 	rxUART1: { gpio: 14, header: 'P9_26' },
+	// 	txUART1: { gpio: 15, header: 'P9_24' },
+	// 	rxUART2: { gpio: 2, header: 'P9_22' },
+	// 	txUART2: { gpio: 3, header: 'P9_21' },
+	// 	rxUART5: { gpio: 79, header: 'P8_38' },
+	// 	txUART5: { gpio: 78, header: 'P8_37' },
+};
 
-const gpioAdapter = [
+const gpioAdapterL = [
 	'P9_11',
 	'P9_11',
 	'P9_26',
@@ -127,7 +127,7 @@ board.on('ready', function () {
 		oem.high();
 
 		// Config UART pins
-		gpioAdapter.forEach((pin) => {
+		gpioAdapterL.forEach((pin) => {
 			cmd.run(`config-pin ${pin} uart`, (err, data, stderr) => {
 				console.log(`pin-config ${pin} >>> data:`, data);
 				console.log(`pin-config ${pin} >>> err:`, err);
