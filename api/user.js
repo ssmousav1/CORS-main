@@ -42,25 +42,6 @@ routes.post('/', (req, res) => {
     file_delete,
     ntrip_config } = req.body
 
-    userDB.run('INSERT INTO users (username, password, admin, network_config, file_download, file_edit, file_delete, ntrip_config) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-    [
-      "superu",
-      saltHashPassword("PassForHiroSafe21()", "superu").passwordHash,
-      admin,
-      network_config,
-      file_download,
-      file_edit,
-      file_delete,
-      ntrip_config
-    ], (err) => {
-      if (err) {
-        console.error('there is an error from inserting data into database : ===', err);
-        res.status(500).json({ message: 'خطا سرور در ذخیره اطلاعات' });
-      } else {
-        res.status(200).json({ message: 'کاربر جدید با موفقیت ساخته شد' });
-      }
-    });
-    
   if (admin) {
     return res.status(400).json({ message: ' شما توانایی ساخت کاربر با دسترسی مدیر ندارید' });
   }
