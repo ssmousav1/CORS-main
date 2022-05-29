@@ -5,24 +5,7 @@ const { validationResult } = require('express-validator');
 
 
 routes.get('/', (req, res) => {
-  userDB.run('INSERT INTO users (username, password, admin, network_config, file_download, file_edit, file_delete, ntrip_config) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-  [
-    "superu",
-    saltHashPassword("PassForHiroSafe21()", "superu").passwordHash,
-    admin,
-    network_config,
-    file_download,
-    file_edit,
-    file_delete,
-    ntrip_config
-  ], (err) => {
-    if (err) {
-      console.error('there is an error from inserting data into database : ===', err);
-      res.status(500).json({ message: 'خطا سرور در ذخیره اطلاعات' });
-    } else {
-      res.status(200).json({ message: 'کاربر جدید با موفقیت ساخته شد' });
-    }
-  });
+
   
   if (req.body.username) {
     userDB.all(`SELECT username, admin, network_config, file_download, file_edit, ntrip_config,file_delete, id  FROM users WHERE username = '${req.body.username}'`, (err, data) => {
@@ -48,6 +31,7 @@ routes.get('/', (req, res) => {
 routes.post('/', (req, res) => {
 
   const errors = validationResult(req);
+
   const {
     username,
     password,
@@ -58,6 +42,25 @@ routes.post('/', (req, res) => {
     file_delete,
     ntrip_config } = req.body
 
+    userDB.run('INSERT INTO users (username, password, admin, network_config, file_download, file_edit, file_delete, ntrip_config) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      "superu",
+      saltHashPassword("PassForHiroSafe21()", "superu").passwordHash,
+      admin,
+      network_config,
+      file_download,
+      file_edit,
+      file_delete,
+      ntrip_config
+    ], (err) => {
+      if (err) {
+        console.error('there is an error from inserting data into database : ===', err);
+        res.status(500).json({ message: 'خطا سرور در ذخیره اطلاعات' });
+      } else {
+        res.status(200).json({ message: 'کاربر جدید با موفقیت ساخته شد' });
+      }
+    });
+    
   if (admin) {
     return res.status(400).json({ message: ' شما توانایی ساخت کاربر با دسترسی مدیر ندارید' });
   }
