@@ -104,11 +104,11 @@ app.use(cors());
 app.use(express.json());
 
 // login route
-// app.use('/auth', accessToken, authRouter);
+app.use('/auth', accessToken, authRouter);
 
 // protected API routes
 app.use('/raw-data-download', DownloadRawDataRoutes);
-// app.use(Auth);
+app.use(Auth);
 app.use('/users', userValidator(), routes);
 app.use('/caster', casterValidator(), casterRoutes);
 app.use('/network', networkValidator(), networkRoutes);
